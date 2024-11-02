@@ -1,0 +1,71 @@
+[System]
+Output filename=C:\Users\murph\Documents\Github\epid8010-final-project\data\caselist_2024.11.csv
+Matrix filename=C:\Users\murph\Documents\Github\epid8010-final-project\seerstat\caselist_2024.11.1 Matrix-1
+Database name=Incidence - SEER Research Data, 17 Registries, Nov 2023 Sub (2000-2021) - Linked To County Attributes - Time Dependent (1990-2022) Income/Rurality, 1969-2022 Counties
+
+[Session Options]
+Type=Case Listing
+
+[Export Options]
+GZipped=false
+Variable format=labels
+File format=DOS/Windows
+Field delimiter=comma
+Missing character=space
+Fields with delimiter in quotes=true
+Remove thousands separators=true
+Variable names included=true
+Column Variables as Stats=false
+
+[Variables]
+Var1Name=Age recode with <1 year olds
+Var1DisplayType=Formatted
+Var2Name=Sex
+Var2DisplayType=Formatted
+Var3Name=Year of diagnosis
+Var3DisplayType=Formatted
+Var4Name=Race/ethnicity
+Var4DisplayType=Formatted
+Var5Name=Marital status at diagnosis
+Var5DisplayType=Formatted
+Var6Name=Derived AJCC T, 7th ed (2010-2015)
+Var6DisplayType=Formatted
+Var7Name=Derived SEER Combined T (2016-2017)
+Var7DisplayType=Formatted
+Var8Name=Derived EOD 2018 T (2018+)
+Var8DisplayType=Formatted
+Var9Name=Breast Subtype (2010+)
+Var9DisplayType=Formatted
+Var10Name=Grade Recode (thru 2017)
+Var10DisplayType=Formatted
+Var11Name=Derived Summary Grade 2018 (2018+)
+Var11DisplayType=Formatted
+Var12Name=Derived AJCC N, 7th ed (2010-2015)
+Var12DisplayType=Formatted
+Var13Name=Derived AJCC M, 7th ed (2010-2015)
+Var13DisplayType=Formatted
+Var14Name=Radiation recode
+Var14DisplayType=Formatted
+Var15Name=Chemotherapy recode (yes, no/unk)
+Var15DisplayType=Formatted
+Var16Name=RX Summ--Surg Prim Site (1998+)
+Var16DisplayType=Formatted
+Var17Name=Survival months
+Var17DisplayType=Formatted
+Var18Name=Vital status recode (study cutoff used)
+Var18DisplayType=Formatted
+Var19Name=Derived EOD 2018 M (2018+)
+Var19DisplayType=Formatted
+Var20Name=Derived EOD 2018 N (2018+)
+Var20DisplayType=Formatted
+Var21Name=Derived SEER Combined M (2016-2017)
+Var21DisplayType=Formatted
+Var22Name=Derived SEER Combined N (2016-2017)
+Var22DisplayType=Formatted
+Var23Name=SEER cause-specific death classification
+Var23DisplayType=Formatted
+Var24Name=SEER other cause of death classification
+Var24DisplayType=Formatted
+Var25Name=Histologic Type ICD-O-3
+Var25DisplayType=Formatted
+
