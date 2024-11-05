@@ -82,6 +82,8 @@ The following variables are selected for inclusion in the data:
 
     -   the literature suggests that there was conflicting grading schema. depending what the results show, either drop grade variable and keep all obs or remove all NA obs and keep grade variable
 
+    -   **drop the individuals with NA grade. this is an important covariate and we don't want to incorrectly assign it.**
+
 -   **DERIVED AJCC N, 7TH ED (2010-2015), DERIVED SEER COMBINED N (2016-2017)** and **DERIVED EOD 2018 N**
 
     -   some documentation on the meaning: <https://staging.seer.cancer.gov/tnm/input/1.3/breast/path_n/>[?(%7Eview_schema%7E,%7Ebreast%7E)](https://staging.seer.cancer.gov/tnm/schema/2.0/breast/?breadcrumbs=(schema_list))
@@ -89,6 +91,8 @@ The following variables are selected for inclusion in the data:
     -   there are clinical and pathological measurements for 2016-217 only. clinical was taken before surgery to remove tumor and pathological was taken after. I think they best way to handle this would be to just group together. this can be mentioned in the limitations.
 
     -   I also recode to create a N stage variable with 5 categories: N0, N1, N2, N3, NX. NX means lymph nodes could not be evaluated. 213 individuals have this, should they be dropped?
+
+    -   **drop the 213 individuals who have NA N stage. this is an important covariate.**
 
 -   **DERIVED AJCC M, 7TH ED (2010-2015), DERIVED SEER COMBINED M (2016-2017)** and **DERIVED EOD 2018 M**
 

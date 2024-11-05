@@ -194,7 +194,9 @@ seer_clean <- seer_filter %>%
 # further filter and select only variables used in analysis
 seer <- seer_clean %>%
   filter(
-    !is.na(subtype)
+    !is.na(subtype),
+    !is.na(grade),
+    n_stage != "NX"
   ) %>%
   select(
     age,
