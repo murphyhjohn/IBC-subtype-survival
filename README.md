@@ -51,6 +51,10 @@ The following variables are selected for inclusion in the data:
 
 -   **AGE RECODE WITH \<1 YEAR OLDS AND 90+**: This recode has 19 age groups in the age recode variable (\< 1 year, 1-4 years, 5-9 years, ..., 85+ years). Limit to 20 years and older.
 
+-   for analysis, create categories 20-49 years (0), 50-69 years (1), and \>=70 years (2).
+
+-   "Age: IBC tends to occur at a younger age and is more commonly diagnosed in women under 50." <https://www.advocatehealth.com/health-services/cancer-institute/cancers-we-treat/breast-cancer/inflammatory-breast-cancer>
+
 -   **Sex**: Male and Female. Variable includes an Unknown option but there doesn't appear to be any in the data. Limit to Female, only.
 
 -   **Year of Diagnosis**: Limit to 2010 - 2021.
@@ -125,3 +129,13 @@ The following variables are selected for inclusion in the data:
     -   494 people are dead of another cause, exclude from analysis
 
     -   Now everyone in the analysis is either alive or dead due to cancer
+
+# Table 1
+
+Clinicopatheological characteristics stratified by breast cancer subtype
+
+# Table 2
+
+Clinicopatheological characteristics stratified by survival
+
+* somehow we need to account for the fact that not everyone starts at the same time

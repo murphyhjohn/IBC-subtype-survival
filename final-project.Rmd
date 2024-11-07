@@ -13,6 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(dplyr)
 library(stringr)
 library(psych)
+library(gmodels)
 ```
 
 
@@ -191,25 +192,38 @@ seer_clean <- seer_filter %>%
     )
     )
 
+# there are soveral variables that need to be categorized for analysis and/filtered
+seer_cat <- seer_clean %>%
+   filter(
+    !is.na(subtype),
+    !is.na(grade),
+    n_stage != "NX"
+  ) %>%
+  mutate(agecat = case_when(
+    age %in% c("20-24 years", "25-29 years", "30-34 years", "35-39 years", "40-44 years", "45-49 years") ~ 0,
+    age %in% c("50-54 years", "55-59 years", "60-64 years", "65-69 years") ~ 1,
+    age %in% c("70-74 years", "75-79 years", "80-84 years", "85+ years") ~ 2,
+    TRUE ~ NA_real_  # Keeps other values as NA if they don’t match any of the above groups
+  ))
+
+
 # further filter and select only variables used in analysis
-seer <- seer_clean %>%
+seer <- seer_cat %>%
   filter(
     !is.na(subtype),
     !is.na(grade),
     n_stage != "NX"
   ) %>%
   select(
-    age,
+    age = agecat,
     sex,
     year_diagnosis,
     race,
     marriage_status,
     subtype,
-    t_stage = tnm,
     n_stage,
     m_stage,
     grade,
-    idc_type,
     radiation,
     chemotherapy,
     surgery,
@@ -222,10 +236,43 @@ attach(seer)
 ```
 
 ```{r}
+# Table 1: Clinicopathological Characteristics by Breast Cancer Subtype
+# (unadjusted associations between covariates and exposure)
+
+## age
+CrossTable(age, subtype, prop.r = FALSE, prop.c = TRUE, prop.t = FALSE, prop.chisq = FALSE, chisq = TRUE)
+
+## race
+CrossTable(race, subtype, prop.r = FALSE, prop.c = TRUE, prop.t = FALSE, prop.chisq = FALSE, chisq = TRUE)
+
+## marriage status
+CrossTable(marriage_status, subtype, prop.r = FALSE, prop.c = TRUE, prop.t = FALSE, prop.chisq = FALSE, chisq = TRUE)
+
+## N stage
+CrossTable(n_stage, subtype, prop.r = FALSE, prop.c = TRUE, prop.t = FALSE, prop.chisq = FALSE, chisq = TRUE)
+
+## M stage
+CrossTable(m_stage, subtype, prop.r = FALSE, prop.c = TRUE, prop.t = FALSE, prop.chisq = FALSE, chisq = TRUE)
+
+## grade
+CrossTable(grade, subtype, prop.r = FALSE, prop.c = TRUE, prop.t = FALSE, prop.chisq = FALSE, chisq = TRUE)
+
+## radiation
+CrossTable(radiation, subtype, prop.r = FALSE, prop.c = TRUE, prop.t = FALSE, prop.chisq = FALSE, chisq = TRUE)
+
+## chemotherapy
+CrossTable(chemotherapy, subtype, prop.r = FALSE, prop.c = TRUE, prop.t = FALSE, prop.chisq = FALSE, chisq = TRUE)
+
+## surgery
+CrossTable(surgery, subtype, prop.r = FALSE, prop.c = TRUE, prop.t = FALSE, prop.chisq = FALSE, chisq = TRUE)
+```
+
+```{r}
+# Table 2: Clinicopathological Characteristics by survival
+# (Unadjusted associations between covariates and survival)
 
 
 ```
-
 
 
 
