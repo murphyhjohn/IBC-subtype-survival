@@ -42,7 +42,7 @@ The specific criteria to identify patients with inflammatory breast cancer (IBC)
 
 1.  Site and Morphology was limited to "Breast" (TNM 7/CS V0204+ SCHEMA RECODE)
 2.  Derived TNM classification, AJCC 7th edition (2010-2015) was limited to "T4d", and Derived SEER combined T (2016-2017) was limited to "cT4D" and "pT4D", and Derived EOD 2018 T (2018+) was limited to "T4D". This is what limits to IBC.
-3.  Age was limited to 20 years and older to target adult women.
+3.  UPDATE: The literature suggests limiting by IDC-O-3 type 8500-8549 Age was limited to 20 years and older to target adult women.
 4.  Sex was limited to Female.
 5.  Limit research to cases diagnosed between 2010 and 2021. This is because the AJCC TNM 7th edition staging system was published in 2010 and because SEER started collecting breast cancer subtype in 2010. The data available is through 2021.
 6.  Limit analysis to individuals who have survival months \>= 1.
@@ -87,6 +87,8 @@ The following variables are selected for inclusion in the data:
     -   the literature suggests that there was conflicting grading schema. depending what the results show, either drop grade variable and keep all obs or remove all NA obs and keep grade variable
 
     -   **drop the individuals with NA grade. this is an important covariate and we don't want to incorrectly assign it.**
+
+    -   **recode this as I/II and III/IV**
 
 -   **DERIVED AJCC N, 7TH ED (2010-2015), DERIVED SEER COMBINED N (2016-2017)** and **DERIVED EOD 2018 N**
 
@@ -134,8 +136,16 @@ The following variables are selected for inclusion in the data:
 
 Clinicopatheological characteristics stratified by breast cancer subtype
 
+-   year of diagnosis as a covariate? I don't think i want to do this because it will obviously be true that those who are diagnosed earlier (who will ultimately survive a long time) will have greater reported survival times than those who were diagnosed in later years
+
+-   table unknowns even ones that are removed. this will be grade, N stage
+
 # Table 2
 
 Clinicopatheological characteristics stratified by survival
 
-* somehow we need to account for the fact that not everyone starts at the same time
+-   somehow we need to account for the fact that not everyone starts at the same time - year of diagnosis is time 0
+
+-   median survival time
+
+-   it truly might just have to be a limitation of this table. what we are showing is reported survival. this table just doesnt account for censored observations.

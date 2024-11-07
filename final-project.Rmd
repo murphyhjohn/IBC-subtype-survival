@@ -14,6 +14,7 @@ library(dplyr)
 library(stringr)
 library(psych)
 library(gmodels)
+library(survival)
 ```
 
 
@@ -63,7 +64,8 @@ seer_filter <- seer_name %>%
     survival_cause_cancer != "Dead (missing/unknown COD)",
     survival_cause_other != "Dead (attributable to causes other than this cancer dx)",
     grade2017 != "B-cell; pre-B; B-precursor",
-    grade2017 != "T-cell"
+    grade2017 != "T-cell",
+    idc_type %in% seq(8500, 8549)
   )
 
 # clean up the variables
@@ -192,28 +194,34 @@ seer_clean <- seer_filter %>%
     )
     )
 
-# there are soveral variables that need to be categorized for analysis and/filtered
+# there are several variables that need to be categorized for analysis and/filtered
 seer_cat <- seer_clean %>%
    filter(
     !is.na(subtype),
-    !is.na(grade),
-    n_stage != "NX"
+    #!is.na(grade),
+    #n_stage != "NX"
   ) %>%
   mutate(agecat = case_when(
     age %in% c("20-24 years", "25-29 years", "30-34 years", "35-39 years", "40-44 years", "45-49 years") ~ 0,
     age %in% c("50-54 years", "55-59 years", "60-64 years", "65-69 years") ~ 1,
     age %in% c("70-74 years", "75-79 years", "80-84 years", "85+ years") ~ 2,
     TRUE ~ NA_real_  # Keeps other values as NA if they don’t match any of the above groups
+  )) %>%
+  mutate(gradecat = case_when(
+    grade %in% c(1, 2) ~ "I/II",
+    grade %in% c(3, 4) ~ "III/IV",
+    TRUE ~ NA_character_
+    )) %>%
+  # the survival_status column is what we use for event/censoring
+  # recode Dead as 1 and Alive (censored) as 0
+  mutate(status_cat = case_when(
+    survival_status == "Dead" ~ 1,
+    survival_status == "Alive" ~ 0
   ))
 
 
 # further filter and select only variables used in analysis
 seer <- seer_cat %>%
-  filter(
-    !is.na(subtype),
-    !is.na(grade),
-    n_stage != "NX"
-  ) %>%
   select(
     age = agecat,
     sex,
@@ -223,12 +231,12 @@ seer <- seer_cat %>%
     subtype,
     n_stage,
     m_stage,
-    grade,
+    grade = gradecat,
     radiation,
     chemotherapy,
     surgery,
     survival_months,
-    survival_status,
+    survival_status = status_cat,
     
   )
   
@@ -271,7 +279,8 @@ CrossTable(surgery, subtype, prop.r = FALSE, prop.c = TRUE, prop.t = FALSE, prop
 # Table 2: Clinicopathological Characteristics by survival
 # (Unadjusted associations between covariates and survival)
 
-
+## age
+summary(survfit(Surv(time = survival_months, event = survival_status) ~ age), times = c(12, 60, 120))
 ```
 
 
