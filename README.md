@@ -149,3 +149,16 @@ Clinicopatheological characteristics stratified by survival
 -   median survival time
 
 -   it truly might just have to be a limitation of this table. what we are showing is reported survival. this table just doesnt account for censored observations.
+
+# Diagnostics
+
+Do a log-log plot for each covariate. 
+
+Potential violations are surgery, chemotherapy, n stage, m stage, grade, radiation
+
+I think it would be beneficial to do a statistical test for all because they're all pretty close and I'm not sure what is meaningful difference.
+
+
+
+
+

@@ -15,6 +15,7 @@ library(stringr)
 library(psych)
 library(gmodels)
 library(survival)
+library(survminer)
 ```
 
 
@@ -140,7 +141,7 @@ seer_clean <- seer_filter %>%
       str_detect(n2015, "N1|N1N0S") ~ "N1",
       str_detect(n2015, "N2|N2N0S") ~ "N2",
       str_detect(n2015, "N3|N3N0S") ~ "N3",
-      str_detect(n2015, "NX") ~ "NX",
+      str_detect(n2015, "NX") ~ NA_character_,
       TRUE ~ NA_character_
     ),
     n2017 = case_when(
@@ -148,7 +149,7 @@ seer_clean <- seer_filter %>%
       str_detect(n2017, "c1|p1") ~ "N1",
       str_detect(n2017, "c2|p2") ~ "N2",
       str_detect(n2017, "c3|p3") ~ "N3",
-      str_detect(n2017, "cX") ~ "NX",
+      str_detect(n2017, "cX") ~ NA_character_,
       TRUE ~ NA_character_
     ),
     n2018 = case_when(
@@ -156,7 +157,7 @@ seer_clean <- seer_filter %>%
       str_detect(n2018, "N1|N1N0S") ~ "N1",
       str_detect(n2018, "N2|N2N0S") ~ "N2",
       str_detect(n2018, "N3|N3N0S") ~ "N3",
-      str_detect(n2018, "NX") ~ "NX",
+      str_detect(n2018, "NX") ~ NA_character_,
       TRUE ~ NA_character_
     ),
     # then merge the 2015, 2017, and 2018 N stage columns
@@ -281,8 +282,71 @@ CrossTable(surgery, subtype, prop.r = FALSE, prop.c = TRUE, prop.t = FALSE, prop
 
 ## age
 summary(survfit(Surv(time = survival_months, event = survival_status) ~ age), times = c(12, 60, 120))
+survdiff(Surv(time = survival_months, event = survival_status) ~ age)
+
+## race
+summary(survfit(Surv(time = survival_months, event = survival_status) ~ race), times = c(12, 60, 120))
+survdiff(Surv(time = survival_months, event = survival_status) ~ race)
+
+## marriage status
+summary(survfit(Surv(time = survival_months, event = survival_status) ~ marriage_status), times = c(12, 60, 120))
+survdiff(Surv(time = survival_months, event = survival_status) ~ marriage_status)
+
+## N stage
+summary(survfit(Surv(time = survival_months, event = survival_status) ~ n_stage), times = c(12, 60, 120))
+survdiff(Surv(time = survival_months, event = survival_status) ~ n_stage)
+
+## M stage
+summary(survfit(Surv(time = survival_months, event = survival_status) ~ m_stage), times = c(12, 60, 120))
+survdiff(Surv(time = survival_months, event = survival_status) ~ m_stage)
+
+## grade
+summary(survfit(Surv(time = survival_months, event = survival_status) ~ grade), times = c(12, 60, 120))
+survdiff(Surv(time = survival_months, event = survival_status) ~ grade)
+
+## radiation
+summary(survfit(Surv(time = survival_months, event = survival_status) ~ radiation), times = c(12, 60, 120))
+survdiff(Surv(time = survival_months, event = survival_status) ~ radiation)
+
+## chemotherapy
+summary(survfit(Surv(time = survival_months, event = survival_status) ~ chemotherapy), times = c(12, 60, 120))
+survdiff(Surv(time = survival_months, event = survival_status) ~ chemotherapy)
+
+## surgery
+summary(survfit(Surv(time = survival_months, event = survival_status) ~ surgery), times = c(12, 60, 120))
+survdiff(Surv(time = survival_months, event = survival_status) ~ surgery)
 ```
 
+```{r}
+# check the proportional hazards assumption for each covariate
+
+## age
+ggsurvplot(survfit(Surv(time = survival_months, event = survival_status) ~ age), data = seer, fun="cloglog")
+
+## race
+ggsurvplot(survfit(Surv(time = survival_months, event = survival_status) ~ race), data = seer, fun="cloglog")
+
+## marriage status
+ggsurvplot(survfit(Surv(time = survival_months, event = survival_status) ~ marriage_status), data = seer, fun="cloglog")
+
+## N stage
+ggsurvplot(survfit(Surv(time = survival_months, event = survival_status) ~ n_stage), data = seer, fun="cloglog")
+
+## M stage
+ggsurvplot(survfit(Surv(time = survival_months, event = survival_status) ~ m_stage), data = seer, fun="cloglog")
+
+## grade
+ggsurvplot(survfit(Surv(time = survival_months, event = survival_status) ~ grade), data = seer, fun="cloglog")
+
+## radiation
+ggsurvplot(survfit(Surv(time = survival_months, event = survival_status) ~ radiation), data = seer, fun="cloglog")
+
+## chemotherapy
+ggsurvplot(survfit(Surv(time = survival_months, event = survival_status) ~ chemotherapy), data = seer, fun="cloglog")
+
+## surgery
+ggsurvplot(survfit(Surv(time = survival_months, event = survival_status) ~ surgery), data = seer, fun="cloglog")
+```
 
 
 
