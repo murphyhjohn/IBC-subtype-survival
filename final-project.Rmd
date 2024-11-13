@@ -54,7 +54,9 @@ seer_name <- seer1 %>%
   survival_cause_other = SEER.other.cause.of.death.classification,
   idc_type = Histologic.Type.ICD.O.3
 )
+```
 
+```{r}
 # filter
 seer_filter <- seer_name %>%
   filter(
@@ -68,7 +70,9 @@ seer_filter <- seer_name %>%
     grade2017 != "T-cell",
     idc_type %in% seq(8500, 8549)
   )
+```
 
+```{r}
 # clean up the variables
 seer_clean <- seer_filter %>%
   mutate(
@@ -194,7 +198,9 @@ seer_clean <- seer_filter %>%
       TRUE ~ "Yes"
     )
     )
+```
 
+```{r}
 # there are several variables that need to be categorized for analysis and/filtered
 seer_cat <- seer_clean %>%
    filter(
@@ -219,6 +225,12 @@ seer_cat <- seer_clean %>%
   mutate(agecat2 = case_when(
     agecat == 2 ~ 1,
     TRUE ~ 0
+  )) %>%
+  mutate(racecat = case_when(
+    race == "White" ~ 0,
+    race == "Black" ~ 1,
+    race == "Other" ~ 2,
+    TRUE ~ NA_integer_
   )) %>%
   mutate(racecat0 = case_when(
     race == "White" ~ 1,
@@ -295,8 +307,9 @@ seer_cat <- seer_clean %>%
     survival_status == "Dead" ~ 1,
     survival_status == "Alive" ~ 0
   ))
+```
 
-
+```{r}
 # further filter and select only variables used in analysis
 seer <- seer_cat %>%
   select(
@@ -304,9 +317,7 @@ seer <- seer_cat %>%
     agecat0,
     agecat1,
     agecat2,
-    sex,
-    year_diagnosis,
-    race,
+    racecat,
     racecat0,
     racecat1,
     racecat2,
@@ -406,6 +417,9 @@ survdiff(Surv(time = survival_months, event = survival_status) ~ surgery)
 ```{r}
 # check the proportional hazards assumption for each covariate with (1) a log log plot
 
+## subtype
+ggsurvplot(survfit(Surv(time = survival_months, event = survival_status) ~ subtype), data = seer, fun="cloglog")
+
 ## agecat
 ggsurvplot(survfit(Surv(time = survival_months, event = survival_status) ~ agecat), data = seer, fun="cloglog")
 
@@ -436,9 +450,10 @@ ggsurvplot(survfit(Surv(time = survival_months, event = survival_status) ~ surge
 
 ```{r}
 # create a dataset in counting process format
-seer.cp <- survSplit(seer, cut=seer$survival_months[seer$survival_status==1],
+seer.cpfull <- survSplit(seer, cut=seer$survival_months[seer$survival_status==1],
                      end="survival_months",event="survival_status", start="start")
-
+# remove NA because the model will do this anyways
+seer.cp <- na.omit(seer.cpfull)
 ```
 
 
@@ -454,17 +469,24 @@ seer.cp$logtrace <- ifelse(seer.cp$race == "White", log(seer.cp$survival_months)
 
 ```{r}
 model <- coxph(
-  Surv(start, survival_months, survival_status) ~ subtype0 + subtype1 + subtype2 + subtype3 +  
-    agecat0 + agecat1 + agecat2 + 
-    racecat0 + racecat1 + racecat2 +
-    marriage_status + 
-    
-    
-               factor(SEX) + factor(cholcat) + CURSMOKE + bmicat1 + bmicat2, data = fham.cp3)
+  Surv(start, survival_months, survival_status) ~ relevel(factor(subtype), ref = '0') +
+    relevel(factor(agecat), ref = '0') + 
+    relevel(factor(racecat), ref = '0') +
+    relevel(factor(marriage_status),ref='1') + 
+    relevel(factor(n_stage),ref='0') + 
+    relevel(factor(m_stage),ref='0') +
+    relevel(factor(grade), ref='0') +
+    relevel(factor(radiation), ref='1') + 
+    relevel(factor(chemotherapy), ref='1') +
+    relevel(factor(surgery), ref='1'),
+  data = seer.cp, 
+  method = "breslow")
+
+summary(model)
+
+# Test proportional hazards assumption with Schoenfeld residuals
+cox.zph(model)
 ```
-
-
-
 
 
 
