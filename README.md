@@ -30,7 +30,7 @@ How is breast cancer subtype associated with overall survival of adult women wit
 
 ## Data
 
-Incidence – SEER Research Data, 17 Registries, Nov 2023 Sub (2000-2021)
+Incidence – SEER Research Data 8.4.4, 17 Registries, Nov 2023 Sub (2000-2021)
 
 The exact filtering input is:
 
@@ -51,9 +51,11 @@ The following variables are selected for inclusion in the data:
 
 -   **AGE RECODE WITH \<1 YEAR OLDS AND 90+**: This recode has 19 age groups in the age recode variable (\< 1 year, 1-4 years, 5-9 years, ..., 85+ years). Limit to 20 years and older.
 
--   for analysis, create categories 20-49 years (0), 50-69 years (1), and \>=70 years (2).
+    -   for analysis, create categories 20-49 years (0), 50-69 years (1), and \>=70 years (2).
 
--   "Age: IBC tends to occur at a younger age and is more commonly diagnosed in women under 50." <https://www.advocatehealth.com/health-services/cancer-institute/cancers-we-treat/breast-cancer/inflammatory-breast-cancer>
+    -   also create seperate variable for each category ie agecat0, ..1, ..2
+
+    -   "Age: IBC tends to occur at a younger age and is more commonly diagnosed in women under 50." <https://www.advocatehealth.com/health-services/cancer-institute/cancers-we-treat/breast-cancer/inflammatory-breast-cancer>
 
 -   **Sex**: Male and Female. Variable includes an Unknown option but there doesn't appear to be any in the data. Limit to Female, only.
 
@@ -61,7 +63,11 @@ The following variables are selected for inclusion in the data:
 
 -   **Race/ethnicity:** Recode to three categories only - White, Black, Other.
 
--   **Marital Status at diagnosis**: Original variable has categories - Divorced, Married (including common law), Separated, Single (never married), Unknown, Unmarried or Domestic Partner, Widowed. Recode to Yes (if original variable is "Married (including common law)") and No (otherwise)
+    -   create racecat variable White (0), Black (1), Other (2)
+
+    -   also create racecat0, ..1, ..2
+
+-   **Marital Status at diagnosis**: Original variable has categories - Divorced, Married (including common law), Separated, Single (never married), Unknown, Unmarried or Domestic Partner, Widowed. Recode to Yes =1 (if original variable is "Married (including common law)") and No = 0 (otherwise)
 
 -   **Derived TNM classification, AJCC 7th edition (2010-2015)**, **Derived SEER combined T (2016-2017)**, and **Derived EOD 2018 T (2018+)**: these were included to cross-validate T-stage then were removed
 
@@ -69,6 +75,7 @@ The following variables are selected for inclusion in the data:
 
     -   Recode to Luminal A (HR+/HER2-), Luminal B (HR+/Her2+), HER2 Positive (HR-/HER2+), Triple Negative (HR-/HER2-)
     -   390 individuals have unknown subtype. These were removed
+    -   create category variable with A as 0, B as 1, Neg as 2, Pos as 3. also create subtype0, ..1, ..2, ..3
 
 -   **Grade Recode (thru 2017)**and **DERIVED SUMMARY GRADE 2018 (2018+). Histologic Type ICD-O-3 which seems probably has documentation somewhere on how to convert to grade but eems like it might be tedious**
 
@@ -88,7 +95,7 @@ The following variables are selected for inclusion in the data:
 
     -   **drop the individuals with NA grade. this is an important covariate and we don't want to incorrectly assign it.**
 
-    -   **recode this as I/II and III/IV**
+    -   **recode this as I/II = 0 and III/IV = 1**
 
 -   **DERIVED AJCC N, 7TH ED (2010-2015), DERIVED SEER COMBINED N (2016-2017)** and **DERIVED EOD 2018 N**
 
@@ -100,6 +107,8 @@ The following variables are selected for inclusion in the data:
 
     -   **drop the 213 individuals who have NA N stage. this is an important covariate.**
 
+    -   create categorical with N0/1 = 0 and N2/3 = 1
+
 -   **DERIVED AJCC M, 7TH ED (2010-2015), DERIVED SEER COMBINED M (2016-2017)** and **DERIVED EOD 2018 M**
 
     -   documentation at <https://staging.seer.cancer.gov/tnm/input/1.3/breast/clin_m/?breadcrumbs=>(~schema_list~),(~view_schema~,~breast~)
@@ -107,6 +116,8 @@ The following variables are selected for inclusion in the data:
     -   2016-2017 has 9 individuals with pathological measurements. I'm handling this same as the n stage
 
     -   Recode as M0 and M1
+
+    -   create categorical with M0 = 0 and M1 = 1
 
 -   **Radiation recode**: Original variable has categories - None/Unknown; diagnosed at autopsy, Beam radiation, Radioactive implants, Radioisotopes, Combination of 1 with 2 or 3, Radiation, NOS—method or source not specified, Other radiation (1973-1987 cases only), Patient or patient's guardian refused radiation therapy, Radiation recommended, unknown if administered
 
@@ -146,19 +157,14 @@ Clinicopatheological characteristics stratified by survival
 
 -   somehow we need to account for the fact that not everyone starts at the same time - year of diagnosis is time 0
 
--   median survival time
+-   median survival time **need to do this**
 
--   it truly might just have to be a limitation of this table. what we are showing is reported survival. this table just doesnt account for censored observations.
+-   it truly might just have to be a limitation of this table. what we are showing is reported survival. this table just doesn't account for censored observations.
 
 # Diagnostics
 
-Do a log-log plot for each covariate. 
+Do a log-log plot for each covariate.
 
 Potential violations are surgery, chemotherapy, n stage, m stage, grade, radiation
 
 I think it would be beneficial to do a statistical test for all because they're all pretty close and I'm not sure what is meaningful difference.
-
-
-
-
-

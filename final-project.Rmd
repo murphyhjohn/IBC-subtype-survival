@@ -208,10 +208,86 @@ seer_cat <- seer_clean %>%
     age %in% c("70-74 years", "75-79 years", "80-84 years", "85+ years") ~ 2,
     TRUE ~ NA_real_  # Keeps other values as NA if they don’t match any of the above groups
   )) %>%
+  mutate(agecat0 = case_when(
+    agecat == 0 ~ 1,
+    TRUE ~ 0
+  )) %>%
+  mutate(agecat1 = case_when(
+    agecat == 1 ~ 1,
+    TRUE ~ 0
+  )) %>%
+  mutate(agecat2 = case_when(
+    agecat == 2 ~ 1,
+    TRUE ~ 0
+  )) %>%
+  mutate(racecat0 = case_when(
+    race == "White" ~ 1,
+    TRUE ~ 0
+  )) %>%
+  mutate(racecat1 = case_when(
+    race == "Black" ~ 1,
+    TRUE ~ 0
+  )) %>%
+  mutate(racecat2 = case_when(
+    race == "Other" ~ 1,
+    TRUE ~ 0
+  )) %>%
+  mutate(marriage_status = case_when(
+    marriage_status == "Yes" ~ 1,
+    TRUE ~ 0
+  )) %>%
+  mutate(subtypecat = case_when(
+    subtype == "Luminal A" ~ 0,
+    subtype == "Luminal B" ~ 1,
+    subtype == "Triple Negative" ~ 2,
+    subtype == "HER2 Positive" ~ 3,
+    TRUE ~ NA_integer_
+  )) %>%
+  mutate(subtype0 = case_when(
+    subtypecat == 0 ~ 1,
+    TRUE ~ 0
+  )) %>%
+  mutate(subtype1 = case_when(
+    subtypecat == 1 ~ 1,
+    TRUE ~ 0
+  )) %>%
+  mutate(subtype2 = case_when(
+    subtypecat == 2 ~ 1,
+    TRUE ~ 0
+  )) %>%
+  mutate(subtype3 = case_when(
+    subtypecat == 3 ~ 1,
+    TRUE ~ 0
+  )) %>%
   mutate(gradecat = case_when(
-    grade %in% c(1, 2) ~ "I/II",
-    grade %in% c(3, 4) ~ "III/IV",
-    TRUE ~ NA_character_
+    grade %in% c(1, 2) ~ 0,
+    grade %in% c(3, 4) ~ 1,
+    TRUE ~ NA_integer_
+    )) %>%
+  mutate(n_stage = case_when(
+    n_stage %in% c("N0", "N1") ~ 0,
+    n_stage %in% c("N2", "N3") ~ 1,
+    TRUE ~ NA_integer_
+    )) %>%
+  mutate(m_stage = case_when(
+    m_stage == "M0" ~ 0,
+    m_stage == "M1" ~ 1,
+    TRUE ~ NA_integer_
+    )) %>%
+  mutate(radiation = case_when(
+    radiation == "No/Unknown" ~ 0,
+    radiation == "Yes" ~ 1,
+    TRUE ~ NA_integer_
+    )) %>%
+  mutate(chemotherapy = case_when(
+    chemotherapy == "No/Unknown" ~ 0,
+    chemotherapy == "Yes" ~ 1,
+    TRUE ~ NA_integer_
+    )) %>%
+  mutate(surgery = case_when(
+    surgery == "No/Unknown" ~ 0,
+    surgery == "Yes" ~ 1,
+    TRUE ~ NA_integer_
     )) %>%
   # the survival_status column is what we use for event/censoring
   # recode Dead as 1 and Alive (censored) as 0
@@ -224,12 +300,22 @@ seer_cat <- seer_clean %>%
 # further filter and select only variables used in analysis
 seer <- seer_cat %>%
   select(
-    age = agecat,
+    agecat,
+    agecat0,
+    agecat1,
+    agecat2,
     sex,
     year_diagnosis,
     race,
+    racecat0,
+    racecat1,
+    racecat2,
     marriage_status,
-    subtype,
+    subtype = subtypecat,
+    subtype0,
+    subtype1,
+    subtype2,
+    subtype3,
     n_stage,
     m_stage,
     grade = gradecat,
@@ -248,8 +334,8 @@ attach(seer)
 # Table 1: Clinicopathological Characteristics by Breast Cancer Subtype
 # (unadjusted associations between covariates and exposure)
 
-## age
-CrossTable(age, subtype, prop.r = FALSE, prop.c = TRUE, prop.t = FALSE, prop.chisq = FALSE, chisq = TRUE)
+## agecat
+CrossTable(agecat, subtype, prop.r = FALSE, prop.c = TRUE, prop.t = FALSE, prop.chisq = FALSE, chisq = TRUE)
 
 ## race
 CrossTable(race, subtype, prop.r = FALSE, prop.c = TRUE, prop.t = FALSE, prop.chisq = FALSE, chisq = TRUE)
@@ -280,9 +366,9 @@ CrossTable(surgery, subtype, prop.r = FALSE, prop.c = TRUE, prop.t = FALSE, prop
 # Table 2: Clinicopathological Characteristics by survival
 # (Unadjusted associations between covariates and survival)
 
-## age
-summary(survfit(Surv(time = survival_months, event = survival_status) ~ age), times = c(12, 60, 120))
-survdiff(Surv(time = survival_months, event = survival_status) ~ age)
+## agecat
+summary(survfit(Surv(time = survival_months, event = survival_status) ~ agecat), times = c(12, 60, 120))
+survdiff(Surv(time = survival_months, event = survival_status) ~ agecat)
 
 ## race
 summary(survfit(Surv(time = survival_months, event = survival_status) ~ race), times = c(12, 60, 120))
@@ -318,10 +404,10 @@ survdiff(Surv(time = survival_months, event = survival_status) ~ surgery)
 ```
 
 ```{r}
-# check the proportional hazards assumption for each covariate
+# check the proportional hazards assumption for each covariate with (1) a log log plot
 
-## age
-ggsurvplot(survfit(Surv(time = survival_months, event = survival_status) ~ age), data = seer, fun="cloglog")
+## agecat
+ggsurvplot(survfit(Surv(time = survival_months, event = survival_status) ~ agecat), data = seer, fun="cloglog")
 
 ## race
 ggsurvplot(survfit(Surv(time = survival_months, event = survival_status) ~ race), data = seer, fun="cloglog")
@@ -348,7 +434,34 @@ ggsurvplot(survfit(Surv(time = survival_months, event = survival_status) ~ chemo
 ggsurvplot(survfit(Surv(time = survival_months, event = survival_status) ~ surgery), data = seer, fun="cloglog")
 ```
 
+```{r}
+# create a dataset in counting process format
+seer.cp <- survSplit(seer, cut=seer$survival_months[seer$survival_status==1],
+                     end="survival_months",event="survival_status", start="start")
 
+```
+
+
+```{r}
+# check PH assumption for race, n_stage, chemotherapy, surgery with statistical approach
+
+# create time-varying covariates for race by adding adding a product term with the ln of time
+seer.cp$logtrace1=seer.cp$race[seer.cp$race == "White"]*log(seer.cp$survival_months)
+
+seer.cp$logtrace <- ifelse(seer.cp$race == "White", log(seer.cp$survival_months), NA)
+
+```
+
+```{r}
+model <- coxph(
+  Surv(start, survival_months, survival_status) ~ subtype0 + subtype1 + subtype2 + subtype3 +  
+    agecat0 + agecat1 + agecat2 + 
+    racecat0 + racecat1 + racecat2 +
+    marriage_status + 
+    
+    
+               factor(SEX) + factor(cholcat) + CURSMOKE + bmicat1 + bmicat2, data = fham.cp3)
+```
 
 
 
