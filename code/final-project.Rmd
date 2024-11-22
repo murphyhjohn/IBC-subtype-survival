@@ -108,133 +108,6 @@ summary(survfit(Surv(time = survival_months, event = survival_status) ~ surgery)
 survdiff(Surv(time = survival_months, event = survival_status) ~ surgery)
 ```
 
-```{r}
-# Figure 2: Log-log plots to check Proportional Hazards assumption
-library(gridExtra)
-library(survminer)
-library(survival)
-
-plot_subtype <- ggsurvplot(
-  survfit(Surv(time = survival_months, event = survival_status) ~ subtype), 
-  data = seer, 
-  fun ="cloglog",
-  ylab = "Log-log survival probability",
-  xlab = "Time (months)",
-  legend.labs = c("Luminal A", "Luminal B", "HER2 Positive", "Triple Negative"))
-
-plot_agecat <- ggsurvplot(
-  survfit(Surv(time = survival_months, event = survival_status) ~ agecat), 
-  data = seer, 
-  fun="cloglog",
-  ylab= "Log-log survival probability",
-  xlab= "Time (months)",
-  legend.labs = c("20-49 years", "50-69 years", ">= 70 years"))
-
-plot_race <- ggsurvplot(
-  survfit(Surv(time = survival_months, event = survival_status) ~ racecat), 
-  data = seer, 
-  fun="cloglog",
-  ylab= "Log-log survival probability",
-  xlab= "Time (months)",
-  legend.labs = c("White", "Black", "Other"))
-
-plot_marriage <- ggsurvplot(
-  survfit(Surv(time = survival_months, event = survival_status) ~ marriage_status), 
-  data = seer, 
-  fun="cloglog",
-  ylab= "Log-log survival probability",
-  xlab= "Time (months)",
-  legend.labs = c("Unmarried", "Married"))
-
-plot_n_stage <- ggsurvplot(
-  survfit(Surv(time = survival_months, event = survival_status) ~ n_stage), 
-  data = seer, 
-  fun="cloglog",
-  ylab= "Log-log survival probability",
-  xlab= "Time (months)",
-  legend.labs = c("N0/1", "N2/3"))
-
-plot_m_stage <- ggsurvplot(
-  survfit(Surv(time = survival_months, event = survival_status) ~ m_stage), 
-  data = seer, 
-  fun="cloglog",
-  ylab= "Log-log survival probability",
-  xlab= "Time (months)",
-  legend.labs = c("M0", "M1"))
-
-plot_grade <- ggsurvplot(
-  survfit(Surv(time = survival_months, event = survival_status) ~ grade), 
-  data = seer, 
-  fun="cloglog",
-  ylab= "Log-log survival probability",
-  xlab= "Time (months)",
-  legend.labs = c("I/II", "III/IV"))
-
-plot_radiation <- ggsurvplot(
-  survfit(Surv(time = survival_months, event = survival_status) ~ radiation), 
-  data = seer, 
-  fun="cloglog",
-  ylab= "Log-log survival probability",
-  xlab= "Time (months)",
-  legend.labs = c("No/Unknown", "Yes"))
-
-plot_chemotherapy <- ggsurvplot(
-  survfit(Surv(time = survival_months, event = survival_status) ~ chemotherapy), 
-  data = seer, 
-  fun="cloglog",
-  ylab= "Log-log survival probability",
-  xlab= "Time (months)",
-  legend.labs = c("No/Unknown", "Yes"))
-
-
-plot_surgery <- ggsurvplot(
-  survfit(Surv(time = survival_months, event = survival_status) ~ surgery), 
-  data = seer, 
-  fun="cloglog",
-  ylab= "Log-log survival probability",
-  xlab= "Time (months)",
-  legend.labs = c("No/Unknown", "Yes"))
-
-grid.arrange(plot_subtype$plot, plot_agecat$plot, plot_race$plot, plot_marriage$plot, plot_n_stage$plot,
-             plot_m_stage$plot, plot_grade$plot, plot_radiation$plot, plot_chemotherapy$plot, plot_surgery$plot,
-             ncol = 5, nrow = 2)
-```
-
-
-
-```{r}
-# check the proportional hazards assumption for each covariate with (1) a log log plot
-
-## subtype
-ggsurvplot(survfit(Surv(time = survival_months, event = survival_status) ~ subtype), data = seer, fun="cloglog")
-
-## agecat
-ggsurvplot(survfit(Surv(time = survival_months, event = survival_status) ~ agecat), data = seer, fun="cloglog")
-
-## race
-ggsurvplot(survfit(Surv(time = survival_months, event = survival_status) ~ racecat), data = seer, fun="cloglog")
-
-## marriage status
-ggsurvplot(survfit(Surv(time = survival_months, event = survival_status) ~ marriage_status), data = seer, fun="cloglog")
-
-## N stage
-ggsurvplot(survfit(Surv(time = survival_months, event = survival_status) ~ n_stage), data = seer, fun="cloglog")
-
-## M stage
-ggsurvplot(survfit(Surv(time = survival_months, event = survival_status) ~ m_stage), data = seer, fun="cloglog")
-
-## grade
-ggsurvplot(survfit(Surv(time = survival_months, event = survival_status) ~ grade), data = seer, fun="cloglog")
-
-## radiation
-ggsurvplot(survfit(Surv(time = survival_months, event = survival_status) ~ radiation), data = seer, fun="cloglog")
-
-## chemotherapy
-ggsurvplot(survfit(Surv(time = survival_months, event = survival_status) ~ chemotherapy), data = seer, fun="cloglog")
-
-## surgery
-ggsurvplot(survfit(Surv(time = survival_months, event = survival_status) ~ surgery), data = seer, fun="cloglog")
-```
 
 ```{r}
 # create a dataset in counting process format
@@ -245,6 +118,9 @@ seer.cp <- na.omit(seer.cpfull)
 ```
 
 ```{r}
+# check the correlation between schoenfeld residuals and ranked survival times
+
+# run the cox ph model
 model <- coxph(
   Surv(survival_months, survival_status) ~ 
     relevel(factor(subtype), ref = '0') +
@@ -261,6 +137,8 @@ model <- coxph(
   method = "breslow")
 
 summary(model)
+
+options(scipen=999)
 
 # Test proportional hazards assumption with Schoenfeld residuals
 resid <- cox.zph(model, terms = FALSE)
@@ -285,15 +163,23 @@ apply(resid$y, 2, \(x) cor.test(rank(resid$time), x))
 cor <- apply(resid$y, 2, \(x) {
   test <- cor.test(rank(resid$time), x)  # Perform correlation test
   c(
-    correlation = test$estimate,
-    p_value = test$p.value,
-    conf_low = test$conf.int[1],
-    conf_high = test$conf.int[2]
+    correlation = round(test$estimate, 3),
+    p_value = round(test$p.value, 3),
+    conf_low = round(test$conf.int[1], 3),
+    conf_high = round(test$conf.int[2], 3)
   ) 
 })
 
-cor_df <- as.data.frame(t(cor))
-colnames(cor_df) <- c("Correlation", "P_Value", "Conf_Low", "Conf_High")
+# Convert the matrix to a data frame
+cor_df_all <- as.data.frame(t(cor))
+
+# Now, we can correctly mutate and format the output
+cor_df <- cor_df_all %>%
+  mutate(
+    Correlation = paste(correlation.cor, " (", conf_low, ", ", conf_high, ")", sep = ""),
+    P_Value = as.character(p_value)
+  ) %>%
+  select(Correlation, P_Value)
 rownames(cor_df) <- c(
   "subtype1",
   "subtype2",
@@ -310,6 +196,32 @@ rownames(cor_df) <- c(
   "chemotherapy",
   "surgery"
 )
+
+# table 3: Correlation between Schoenfeld residuals and ranked survival time
+t3_raw <- cor_df %>%
+  add_row(Correlation = "", P_Value = "", .before = 1) %>%
+  add_row(Correlation = "", P_Value = "", .before = 1) %>%
+  add_row(Correlation = "", P_Value = "", .before = 6) %>%
+  add_row(Correlation = "", P_Value = "", .before = 6) %>%
+  add_row(Correlation = "", P_Value = "", .before = 10) %>%
+  add_row(Correlation = "", P_Value = "", .before = 10) %>%
+  add_row(Correlation = "", P_Value = "", .before = 14) %>%
+  add_row(Correlation = "", P_Value = "", .before = 14) %>%
+  add_row(Correlation = "", P_Value = "", .before = 17) %>%
+  add_row(Correlation = "", P_Value = "", .before = 17) %>%
+  add_row(Correlation = "", P_Value = "", .before = 20) %>%
+  add_row(Correlation = "", P_Value = "", .before = 20) %>%
+  add_row(Correlation = "", P_Value = "", .before = 23) %>%
+  add_row(Correlation = "", P_Value = "", .before = 23) %>%
+  add_row(Correlation = "", P_Value = "", .before = 26) %>%
+  add_row(Correlation = "", P_Value = "", .before = 26) %>%
+  add_row(Correlation = "", P_Value = "", .before = 29) %>%
+  add_row(Correlation = "", P_Value = "", .before = 29) %>%
+  add_row(Correlation = "", P_Value = "", .before = 32) %>%
+  add_row(Correlation = "", P_Value = "", .before = 32)
+  
+
+  
 
 ```
 
