@@ -121,13 +121,13 @@ The following variables are selected for inclusion in the data:
 
 -   **Radiation recode**: Original variable has categories - None/Unknown; diagnosed at autopsy, Beam radiation, Radioactive implants, Radioisotopes, Combination of 1 with 2 or 3, Radiation, NOS—method or source not specified, Other radiation (1973-1987 cases only), Patient or patient's guardian refused radiation therapy, Radiation recommended, unknown if administered
 
-    -   Recode as No/Unknown, Yes
+    -   Recode as No/Unknown = 0, Yes = 1
 
--   **Chemotherapy recode**: No/Unknown, Yes
+-   **Chemotherapy recode**: No/Unknown = 0, Yes = 1
 
 -   **RX SUMM—SURG PRIM SITE (1998+)**: From SEER data description, "Surgery of Primary Site describes a surgical procedure that removes and/or destroys tissue of the primary site performed as part of the initial work-up or first course of therapy". There are a variety of codes. It may be useful to make this yes/no.
 
-    -   Recode as No/Unknown, Yes
+    -   Recode as No/Unknown = 0, Yes = 1
 
 -   **Survival months**: "Created using complete dates, including days, therefore may differ from survival time calculated from year and month only."
 
@@ -167,4 +167,4 @@ Do a log-log plot for each covariate.
 
 Potential violations are surgery, chemotherapy, n stage, m stage, grade, radiation
 
-I think it would be beneficial to do a statistical test for all because they're all pretty close and I'm not sure what is meaningful difference.
+Find the correlations between schoenfeld residuals and ranked survival times. none are too extreme therefore we consider the proportional hazards assumption as not violated.
