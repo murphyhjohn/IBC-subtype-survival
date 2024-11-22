@@ -190,6 +190,61 @@ seer_complete <- seer_clean %>%
     n_stage != "NX" # 106 indiv excluded, 4140 remain
   )
 
+# there are several variables that need to be categorized for analysis and/filtered
+# for this df leave the category names legible for creating tables
+seer_catclean <- seer_complete %>%
+  mutate(subtype = factor(
+    subtype, levels = c("Luminal A", "Luminal B", "HER2 Positive", "Triple Negative")
+  )) %>%
+  mutate(agecat = case_when(
+    age %in% c("20-24 years", "25-29 years", "30-34 years", "35-39 years", "40-44 years", "45-49 years") ~ "20-49 years",
+    age %in% c("50-54 years", "55-59 years", "60-64 years", "65-69 years") ~ "50-69 years",
+    age %in% c("70-74 years", "75-79 years", "80-84 years", "85+ years") ~ ">=70 years",
+    TRUE ~ NA_character_  # Keeps other values as NA if they don’t match any of the above groups
+  )) %>%
+  mutate(agecat = factor(
+    agecat, levels = c("20-49 years", "50-69 years", ">=70 years")
+  )) %>%
+  mutate(race = factor(
+      race, levels = c("White", "Black", "Other")
+  )) %>%
+  mutate(marriage_status = case_when(
+    marriage_status == "Yes" ~ "Married",
+    TRUE ~ "Unmarried"
+  )) %>%
+  mutate(marriage_status = factor(
+    marriage_status, levels = c("Unmarried", "Married")
+  )) %>%
+  mutate(gradecat = case_when(
+    grade %in% c(1, 2) ~ "I/II",
+    grade %in% c(3, 4) ~ "III/IV",
+    TRUE ~ NA_character_
+  )) %>%
+  mutate(n_stage = case_when(
+    n_stage %in% c("N0", "N1") ~ "N0/N1",
+    n_stage %in% c("N2", "N3") ~ "N2/N3",
+    TRUE ~ NA_character_
+  ))
+
+# save this data with named categories as it will be useful for creating tables
+seer_tab <- seer_catclean %>%
+  select(
+    agecat,
+    race,
+    marriage_status,
+    subtype,
+    n_stage,
+    m_stage,
+    gradecat,
+    radiation,
+    chemotherapy,
+    surgery,
+    survival_months,
+    survival_status,
+  )
+
+# save as rds file
+saveRDS(seer_tab, file = "data/processed/seer_tab.rds")
 
 # there are several variables that need to be categorized for analysis and/filtered
 seer_cat <- seer_complete %>%
@@ -318,7 +373,6 @@ seer <- seer_cat %>%
     surgery,
     survival_months,
     survival_status = status_cat,
-    
   )
 
 # save as rds file

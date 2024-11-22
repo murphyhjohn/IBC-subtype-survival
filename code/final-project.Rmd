@@ -61,6 +61,8 @@ CrossTable(surgery, subtype, prop.r = FALSE, prop.c = TRUE, prop.t = FALSE, prop
 ```{r}
 # Table 2: Clinicopathological Characteristics by survival
 # (Unadjusted associations between covariates and survival) also median survival
+# this is univariate cox ph model
+# Risk factors for OS according to the Cox proportional hazards regression model.
 
 ## agecat
 survfit(Surv(survival_months, survival_status)~agecat)
@@ -119,8 +121,11 @@ seer.cp <- na.omit(seer.cpfull)
 
 ```{r}
 # check the correlation between schoenfeld residuals and ranked survival times
+library(survival)
+library(dplyr)
 
 # run the cox ph model
+# this will be in Table 2 as multivariate analysis
 model <- coxph(
   Surv(survival_months, survival_status) ~ 
     relevel(factor(subtype), ref = '0') +
