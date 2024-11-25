@@ -63,9 +63,7 @@ The following variables are selected for inclusion in the data:
 
 -   **Race/ethnicity:** Recode to three categories only - White, Black, Other.
 
-    -   create racecat variable White (0), Black (1), Other (2)
-
-    -   also create racecat0, ..1, ..2
+    -   create race variable White (0), Black (1), Other (2)
 
 -   **Marital Status at diagnosis**: Original variable has categories - Divorced, Married (including common law), Separated, Single (never married), Unknown, Unmarried or Domestic Partner, Widowed. Recode to Yes =1 (if original variable is "Married (including common law)") and No = 0 (otherwise)
 
@@ -107,7 +105,7 @@ The following variables are selected for inclusion in the data:
 
     -   **drop the 213 individuals who have NA N stage. this is an important covariate.**
 
-    -   create categorical with N0/1 = 0 and N2/3 = 1
+    -   create categorical with N0/1 = 0 and N2/3 = 1 **Update: dont combine categories**
 
 -   **DERIVED AJCC M, 7TH ED (2010-2015), DERIVED SEER COMBINED M (2016-2017)** and **DERIVED EOD 2018 M**
 

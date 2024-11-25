@@ -191,7 +191,7 @@ seer_complete <- seer_clean %>%
   )
 
 # there are several variables that need to be categorized for analysis and/filtered
-# for this df leave the category names legible for creating tables
+# for this df leave the category names legible for creating table 1
 seer_catclean <- seer_complete %>%
   mutate(subtype = factor(
     subtype, levels = c("Luminal A", "Luminal B", "HER2 Positive", "Triple Negative")
@@ -219,14 +219,9 @@ seer_catclean <- seer_complete %>%
     grade %in% c(1, 2) ~ "I/II",
     grade %in% c(3, 4) ~ "III/IV",
     TRUE ~ NA_character_
-  )) %>%
-  mutate(n_stage = case_when(
-    n_stage %in% c("N0", "N1") ~ "N0/N1",
-    n_stage %in% c("N2", "N3") ~ "N2/N3",
-    TRUE ~ NA_character_
   ))
 
-# save this data with named categories as it will be useful for creating tables
+# save this data with named categories as it will be useful for creating table 1
 seer_tab <- seer_catclean %>%
   select(
     agecat,
@@ -248,123 +243,85 @@ saveRDS(seer_tab, file = "data/processed/seer_tab.rds")
 
 # there are several variables that need to be categorized for analysis and/filtered
 seer_cat <- seer_complete %>%
-  mutate(agecat = case_when(
-    age %in% c("20-24 years", "25-29 years", "30-34 years", "35-39 years", "40-44 years", "45-49 years") ~ 0,
-    age %in% c("50-54 years", "55-59 years", "60-64 years", "65-69 years") ~ 1,
-    age %in% c("70-74 years", "75-79 years", "80-84 years", "85+ years") ~ 2,
-    TRUE ~ NA_real_  # Keeps other values as NA if they don’t match any of the above groups
-  )) %>%
-  mutate(agecat0 = case_when(
-    agecat == 0 ~ 1,
-    TRUE ~ 0
-  )) %>%
-  mutate(agecat1 = case_when(
-    agecat == 1 ~ 1,
-    TRUE ~ 0
-  )) %>%
-  mutate(agecat2 = case_when(
-    agecat == 2 ~ 1,
-    TRUE ~ 0
-  )) %>%
-  mutate(racecat = case_when(
-    race == "White" ~ 0,
-    race == "Black" ~ 1,
-    race == "Other" ~ 2,
-    TRUE ~ NA_integer_
-  )) %>%
-  mutate(racecat0 = case_when(
-    race == "White" ~ 1,
-    TRUE ~ 0
-  )) %>%
-  mutate(racecat1 = case_when(
-    race == "Black" ~ 1,
-    TRUE ~ 0
-  )) %>%
-  mutate(racecat2 = case_when(
-    race == "Other" ~ 1,
-    TRUE ~ 0
-  )) %>%
-  mutate(marriage_status = case_when(
-    marriage_status == "Yes" ~ 1,
-    TRUE ~ 0
-  )) %>%
-  mutate(subtypecat = case_when(
-    subtype == "Luminal A" ~ 0,
-    subtype == "Luminal B" ~ 1,
-    subtype == "Triple Negative" ~ 2,
-    subtype == "HER2 Positive" ~ 3,
-    TRUE ~ NA_integer_
-  )) %>%
-  mutate(subtype0 = case_when(
-    subtypecat == 0 ~ 1,
-    TRUE ~ 0
-  )) %>%
-  mutate(subtype1 = case_when(
-    subtypecat == 1 ~ 1,
-    TRUE ~ 0
-  )) %>%
-  mutate(subtype2 = case_when(
-    subtypecat == 2 ~ 1,
-    TRUE ~ 0
-  )) %>%
-  mutate(subtype3 = case_when(
-    subtypecat == 3 ~ 1,
-    TRUE ~ 0
-  )) %>%
-  mutate(gradecat = case_when(
-    grade %in% c(1, 2) ~ 0,
-    grade %in% c(3, 4) ~ 1,
-    TRUE ~ NA_integer_
-  )) %>%
-  mutate(n_stage = case_when(
-    n_stage %in% c("N0", "N1") ~ 0,
-    n_stage %in% c("N2", "N3") ~ 1,
-    TRUE ~ NA_integer_
-  )) %>%
-  mutate(m_stage = case_when(
-    m_stage == "M0" ~ 0,
-    m_stage == "M1" ~ 1,
-    TRUE ~ NA_integer_
-  )) %>%
-  mutate(radiation = case_when(
-    radiation == "No/Unknown" ~ 0,
-    radiation == "Yes" ~ 1,
-    TRUE ~ NA_integer_
-  )) %>%
-  mutate(chemotherapy = case_when(
-    chemotherapy == "No/Unknown" ~ 0,
-    chemotherapy == "Yes" ~ 1,
-    TRUE ~ NA_integer_
-  )) %>%
-  mutate(surgery = case_when(
-    surgery == "No/Unknown" ~ 0,
-    surgery == "Yes" ~ 1,
-    TRUE ~ NA_integer_
-  )) %>%
+  mutate(agecat = factor(
+    case_when(
+      age %in% c("20-24 years", "25-29 years", "30-34 years", "35-39 years", "40-44 years", "45-49 years") ~ 0,
+      age %in% c("50-54 years", "55-59 years", "60-64 years", "65-69 years") ~ 1,
+      age %in% c("70-74 years", "75-79 years", "80-84 years", "85+ years") ~ 2,
+      TRUE ~ NA_real_  # Keeps other values as NA if they don’t match any of the above groups
+      ))) %>%
+  mutate(racecat = factor(
+    case_when(
+      race == "White" ~ 0,
+      race == "Black" ~ 1,
+      race == "Other" ~ 2,
+      TRUE ~ NA_integer_
+      ))) %>%
+  mutate(marriage_status = factor(
+    case_when(
+      marriage_status == "Yes" ~ 1,
+      TRUE ~ 0
+      ))) %>%
+  mutate(subtypecat = factor(
+    case_when(
+      subtype == "Luminal A" ~ 0,
+      subtype == "Luminal B" ~ 1,
+      subtype == "Triple Negative" ~ 2,
+      subtype == "HER2 Positive" ~ 3,
+      TRUE ~ NA_integer_
+    ))) %>%
+  mutate(gradecat = factor(
+    case_when(
+      grade %in% c(1, 2) ~ 0,
+      grade %in% c(3, 4) ~ 1,
+      TRUE ~ NA_integer_
+    ))) %>%
+  mutate(n_stage = factor(
+    case_when(
+      n_stage == "N0" ~ 0,
+      n_stage == "N1" ~ 1,
+      n_stage == "N2" ~ 2,
+      n_stage == "N3" ~ 3,
+      TRUE ~ NA_integer_
+    ))) %>%
+  mutate(m_stage = factor(
+    case_when(
+      m_stage == "M0" ~ 0,
+      m_stage == "M1" ~ 1,
+      TRUE ~ NA_integer_
+    ))) %>%
+  mutate(radiation = factor(
+    case_when(
+      radiation == "No/Unknown" ~ 0,
+      radiation == "Yes" ~ 1,
+      TRUE ~ NA_integer_
+    ))) %>%
+  mutate(chemotherapy = factor(
+    case_when(
+      chemotherapy == "No/Unknown" ~ 0,
+      chemotherapy == "Yes" ~ 1,
+      TRUE ~ NA_integer_
+    ))) %>%
+  mutate(surgery = factor(
+    case_when(
+      surgery == "No/Unknown" ~ 0,
+      surgery == "Yes" ~ 1,
+      TRUE ~ NA_integer_
+    ))) %>%
   # the survival_status column is what we use for event/censoring
   # recode Dead as 1 and Alive (censored) as 0
   mutate(status_cat = case_when(
-    survival_status == "Dead" ~ 1,
-    survival_status == "Alive" ~ 0
-  ))
+      survival_status == "Dead" ~ 1,
+      survival_status == "Alive" ~ 0
+    ))
 
 # further filter and select only variables used in analysis
 seer <- seer_cat %>%
   select(
-    agecat,
-    agecat0,
-    agecat1,
-    agecat2,
-    racecat,
-    racecat0,
-    racecat1,
-    racecat2,
+    age = agecat,
+    race = racecat,
     marriage_status,
     subtype = subtypecat,
-    subtype0,
-    subtype1,
-    subtype2,
-    subtype3,
     n_stage,
     m_stage,
     grade = gradecat,

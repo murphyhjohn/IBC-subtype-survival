@@ -51,7 +51,7 @@ plot_n_stage <- ggsurvplot(
   fun="cloglog",
   ylab = "log(-log(S(t))",
   xlab = "log(Time)",
-  legend.labs = c("N0/1", "N2/3"),
+  legend.labs = c("N0", "N1", "N2", "N3"),
   legend.title = "N Stage:")
 
 plot_m_stage <- ggsurvplot(

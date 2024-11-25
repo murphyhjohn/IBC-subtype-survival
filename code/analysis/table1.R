@@ -20,6 +20,7 @@ box::use(
 seer <- readRDS("data/processed/seer_tab.rds")
 attach(seer)
 
+# create table 1
 t1 <-
   seer |>
   gtsummary::tbl_summary(
@@ -27,7 +28,7 @@ t1 <-
     include = c(agecat, race, marriage_status, n_stage, m_stage,
                 gradecat, radiation, chemotherapy, surgery),
     label = list(
-      agecat ~ "Age (years)",
+      agecat ~ "Age at diagnosis",
       race ~ "Race",
       marriage_status ~ "Marital Status",
       n_stage ~ "N Stage",
@@ -48,7 +49,6 @@ t1 <-
     ),
     digits = c(agecat, race, marriage_status, n_stage, m_stage,
                gradecat, radiation, chemotherapy, surgery) ~ c(0, 1),
-    statistic_header = "**Statistic**"
   ) |>
   gtsummary::add_overall() |>
   gtsummary::add_p() |>
@@ -57,17 +57,10 @@ t1 <-
   ) |>
   gtsummary::as_gt()
 
+# save to png
 gt::gtsave(
   data = t1,
   filename = here::here("results/tables", "t1.png"),
   vwidth = 2400,
   vheight = 1350
 )
-
-t4b |>
-  gt::rm_caption() |>
-  gt::gtsave(
-    filename = here::here("results", "paper-t1.png"),
-    vwidth = 2400,
-    vheight = 1350
-  )

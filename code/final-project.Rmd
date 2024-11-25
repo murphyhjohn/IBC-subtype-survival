@@ -30,11 +30,11 @@ attach(seer)
 # Table 1: Clinicopathological Characteristics by Breast Cancer Subtype
 # (unadjusted associations between covariates and exposure)
 
-## agecat
-CrossTable(agecat, subtype, prop.r = FALSE, prop.c = TRUE, prop.t = FALSE, prop.chisq = FALSE, chisq = TRUE)
+## age
+CrossTable(age, subtype, prop.r = FALSE, prop.c = TRUE, prop.t = FALSE, prop.chisq = FALSE, chisq = TRUE)
 
 ## race
-CrossTable(racecat, subtype, prop.r = FALSE, prop.c = TRUE, prop.t = FALSE, prop.chisq = FALSE, chisq = TRUE)
+CrossTable(race, subtype, prop.r = FALSE, prop.c = TRUE, prop.t = FALSE, prop.chisq = FALSE, chisq = TRUE)
 
 ## marriage status
 CrossTable(marriage_status, subtype, prop.r = FALSE, prop.c = TRUE, prop.t = FALSE, prop.chisq = FALSE, chisq = TRUE)
@@ -46,7 +46,7 @@ CrossTable(n_stage, subtype, prop.r = FALSE, prop.c = TRUE, prop.t = FALSE, prop
 CrossTable(m_stage, subtype, prop.r = FALSE, prop.c = TRUE, prop.t = FALSE, prop.chisq = FALSE, chisq = TRUE)
 
 ## grade
-CrossTable(grade, subtype, prop.r = FALSE, prop.c = TRUE, prop.t = FALSE, prop.chisq = FALSE, chisq = TRUE, useNA = "always")
+CrossTable(grade, subtype, prop.r = FALSE, prop.c = TRUE, prop.t = FALSE, prop.chisq = FALSE, chisq = TRUE)
 
 ## radiation
 CrossTable(radiation, subtype, prop.r = FALSE, prop.c = TRUE, prop.t = FALSE, prop.chisq = FALSE, chisq = TRUE)
@@ -64,15 +64,15 @@ CrossTable(surgery, subtype, prop.r = FALSE, prop.c = TRUE, prop.t = FALSE, prop
 # this is univariate cox ph model
 # Risk factors for OS according to the Cox proportional hazards regression model.
 
-## agecat
-survfit(Surv(survival_months, survival_status)~agecat)
-summary(survfit(Surv(time = survival_months, event = survival_status) ~ agecat), times = c(12, 60, 120))
-survdiff(Surv(time = survival_months, event = survival_status) ~ agecat)
+## age
+survfit(Surv(survival_months, survival_status)~age)
+summary(survfit(Surv(time = survival_months, event = survival_status) ~ age), times = c(12, 60, 120))
+survdiff(Surv(time = survival_months, event = survival_status) ~ age)
 
 ## race
-survfit(Surv(survival_months, survival_status)~racecat)
-summary(survfit(Surv(time = survival_months, event = survival_status) ~ racecat), times = c(12, 60, 120))
-survdiff(Surv(time = survival_months, event = survival_status) ~ racecat)
+survfit(Surv(survival_months, survival_status)~race)
+summary(survfit(Surv(time = survival_months, event = survival_status) ~ race), times = c(12, 60, 120))
+survdiff(Surv(time = survival_months, event = survival_status) ~ race)
 
 ## marriage status
 survfit(Surv(survival_months, survival_status)~marriage_status)
@@ -129,8 +129,8 @@ library(dplyr)
 model <- coxph(
   Surv(survival_months, survival_status) ~ 
     relevel(factor(subtype), ref = '0') +
-    relevel(factor(agecat), ref = '0') + 
-    relevel(factor(racecat), ref = '0') +
+    relevel(factor(age), ref = '0') + 
+    relevel(factor(race), ref = '0') +
     relevel(factor(marriage_status),ref='1') + 
     relevel(factor(n_stage),ref='0') + 
     relevel(factor(m_stage),ref='0') +
@@ -153,10 +153,10 @@ apply(resid$y, 2, \(x) cor.test(rank(resid$time), x))
 # subtype1: -0.034
 # subtype2: -0.1296
 # subtype3: -0.0435
-# agecat1: -0.0331
-# agecat2: -0.0304
-# racecat1: 0.0077
-# racecat2: 0.0102
+# age1: -0.0331
+# age2: -0.0304
+# race1: 0.0077
+# race2: 0.0102
 # marraige_status0: 0.0043
 # n_stage1: 0.0188
 # m_stage: -0.0046
@@ -189,12 +189,14 @@ rownames(cor_df) <- c(
   "subtype1",
   "subtype2",
   "subtype3",
-  "agecat1",
-  "agecat2",
-  "racecat1",
-  "racecat2",
+  "age1",
+  "age2",
+  "race1",
+  "race2",
   "marraige_status0",
   "n_stage1",
+  "n_stage2",
+  "n_stage3",
   "m_stage",
   "grade",
   "radiation",
@@ -248,8 +250,8 @@ model_ext <- coxph(
   formula = Surv(
     seer.cp$start, seer.cp$survival_months, seer.cp$survival_status) ~ 
     subtype1 + subtype2 + subtype3 + 
-    relevel(factor(agecat), ref = '0') + 
-    relevel(factor(racecat), ref = '0') +
+    relevel(factor(age), ref = '0') + 
+    relevel(factor(race), ref = '0') +
     relevel(factor(marriage_status),ref='1') + 
     relevel(factor(n_stage),ref='0') + 
     relevel(factor(m_stage),ref='0') +
