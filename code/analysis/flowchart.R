@@ -7,25 +7,21 @@ library(grid)
 library(magrittr)
 
 
-eligible <- boxGrob(glue("Breast cencer patients diagnosed with \ninflammatory breast carcinoma between 2010-2021",
+eligible <- boxGrob(glue("Adult female patients diagnosed with \ninflammatory breast carcinoma between 2010-2021",
                          "N = {pop}",
-                         pop = txtInt(5986),
+                         pop = txtInt(5969),
                          .sep = "\n"))
 
-included <- boxGrob(glue("Eligible inflammatory breast \ncancer patients",
+included <- boxGrob(glue("Eligible adult female inflammatory \nbreast cancer patients",
                          "n = {incl}",
                          incl = txtInt(4140),
                          .sep = "\n"))
 
 excluded <- boxGrob(glue("Excluded (n = {tot}):",
-                         " - Age at diagnosis < 20 years: {age}",
-                         " - Male sex: {male}",
                          " - Survival time < 1 month: {survival}",
                          " - Unknown or competing \ncause of death: {cod}",
                          " - Incomplete or unknown \nclinicopathological characteristics: {incomplete}",
-                         tot = txtInt(1846),
-                         age = 1,
-                         male = 16,
+                         tot = txtInt(1829),
                          survival = 165,
                          cod = 487,
                          incomplete = txtInt(1177),

@@ -28,8 +28,9 @@ t2 <- tbl_survfit(
   statistic = "{estimate}",
   times = c(0, 12, 60, 120)
   ) |>
+  add_p() |>
   gtsummary::modify_caption(
-    "Table 2: Survival for IBC by Clinicopathological Characteristics"
+    "Table 2: Survival for IBC by Demographics <br> and Clinicopathologic Characteristics"
   )
 
 # create and assign more descriptive labels
@@ -46,7 +47,7 @@ labels = c(
   "Surgery", "No/Unknown", "Yes")
 
 t2$table_body$label[1:36] <- labels
-t2$table_styling$header$label[5:8] <- c("**Median Survival (years)**", "**1 Year**", "**5 Year**", "**10 Year**")
+t2$table_styling$header$label[6:9] <- c("**Median Survival (years)**", "**1 Year**", "**5 Year**", "**10 Year**")
 
 # since we can't do both median survival and specific times,
 # create a seperate table with median survival

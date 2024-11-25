@@ -41,8 +41,6 @@ seer <- readr::read_rds(here::here("data", "processed", "seer.rds"))
 
 **Conclusions:**
 
-**Keywords:**
-
 \pagebreak
 
 # Introduction
@@ -51,13 +49,13 @@ Inflammatory breast cancer (IBC) is a rare but aggressive subtype of breast canc
 
 Clinically, IBC is categorized as T4d in the TNM classification for its aggressive biological behavior. In spite of multimodal therapy, IBC has a local recurrence rate of up to 50% and survival rates of only 35% to 40%, significantly lower than those of other types of breast cancer [@robertson2010inflammatory]. Despite its rarity, IBC disproportionately accounts for up to 10% of all breast cancer-related deaths [@devi2019perspectives; @hance2005trends].
 
-Because IBC is rare, the biological characteristics of IBC are not commonly reported and the molecular alterations that result in poor prognosis are not well understood. However, hormone receptors (HR) and human epidermal growth factor receptor-2 (HER2), which define the molecular status of IBC through immunohistochemistry (IHC), are fundamental markers used to demonstrate molecular features, predict prognosis, and optimize therapeutic regimens [@li2017outcomes]. IBC tumors are characterized by combinations of hormone receptors and oncogenes, allowing the majority to be characterized as HR+/HER2- (Luminal A), HR+/HER+ (Luminal B), HR-/HER2+ (HER2 Positive), and Triple Negative by IHC.[@TCR28003]. Studies have shown that these four molecular subtypes reveal the prognostic discrepancies in both common breast cancers and IBC [@robertson2010inflammatory; @le2015future; @tolaney2015adjuvant; @iwamoto2011different]. A previous study examined the association between molecular subtypes and survival outcomes in IBC patients from 2010 to 2013 [@li2017outcomes]. However, no updated population-based studies have investigated this relationship.
+Because IBC is rare, the biological characteristics of IBC are not commonly reported and the molecular alterations that result in poor prognosis are not well understood. However, hormone receptors (HR) and human epidermal growth factor receptor-2 (HER2), which define the molecular status of IBC through immunohistochemistry (IHC), are fundamental markers used to demonstrate molecular features, predict prognosis, and optimize therapeutic regimens [@li2017outcomes]. IBC tumors are characterized by combinations of hormone receptors and oncogenes, allowing the majority to be characterized as Luminal A (HR+/HER2-), Luminal B (HR+/HER+), HER2 Positive (HR-/HER2+), and Triple Negative by IHC.[@TCR28003]. Studies have shown that these four molecular subtypes reveal the prognostic discrepancies in both common breast cancers and IBC [@robertson2010inflammatory; @le2015future; @tolaney2015adjuvant; @iwamoto2011different]. A previous study examined the association between molecular subtypes and survival outcomes in IBC patients from 2010 to 2013 [@li2017outcomes]. However, no updated population-based studies have investigated this relationship.
 
 Therefore, using the most recent Surveillance, Epidemiology, and End Results (SEER) data, this study aims to assess the effect of IBC molecular subtype on breast cancer-specific mortality in adult females with IBC.
 
 # Methods
 
-The National Cancer Institute's Surveillance, Epidemiology, and End Results (SEER) database is an authoritative source of information on cancer incidence and survival in the United States. SEER currently collects and publishes cancer incidence and survival data from population-based cancer registries covering approximately 48% of the U.S. population. This study utilized SEER incidence data from 2010 to 2021.
+The National Cancer Institute's Surveillance, Epidemiology, and End Results (SEER) database is an authoritative source of information on cancer incidence and survival in the United States (https://seer.cancer.gov/). SEER currently collects and publishes cancer incidence and survival data from population-based cancer registries covering approximately 48% of the U.S. population. This study utilized SEER incidence data from 2010 to 2021.
 
 ## Study Population
 
@@ -65,13 +63,21 @@ The study population focuses on adult females diagnosed with IBC. Data was extra
 
 ## Variables
 
-For each case, the following information from SEER was obtained: age at diagnosis (20-49, 50-69, and \$\ge\$70), race (white, black, other), marital status (unmarried, married), N stage (N0, N1, N2, N3), M stage (M0, M1), grade (I/II, III/IV), radiation (no/unknown, yes), chemotherapy (no/unknown, yes), surgery (no/unknown, yes), survival months, cause-specific death classification (Alive or dead of other cause, Dead (attributable to this cancer dx), Dead (missing/unknown COD)), and other cause of death classification (Alive or dead due to cancer, Dead (attributable to causes other than this cancer dx), Dead (missing/unknown COD)). In addition, cases were excluded from the study if they had incomplete information on any of these characteristics. Patients who survived less than one month were also excluded. To limit our analysis to breast cancer-specific mortality, patients with unknown cause of death or patients with cause of death to another casue were excluded.
+For each case, the following information from SEER was obtained: age at diagnosis (20-49, 50-69, and \$\ge\$70), race (white, black, other), marital status (unmarried, married), N stage (N0, N1, N2, N3), M stage (M0, M1), grade (I/II, III/IV), radiation (no/unknown, yes), chemotherapy (no/unknown, yes), surgery (no/unknown, yes), survival months, cause-specific death classification (Alive or dead of other cause, Dead (attributable to this cancer), Dead (missing/unknown COD)), and other cause of death classification (Alive or dead due to cancer, Dead (attributable to causes other than this cancer), Dead (missing/unknown COD)). Breast cancer subtypes were classified as Luminal A (HR+/HER2-), Luminal B (HR+/HER+), HER2 positive (HR-/HER2+), and Triple Negative. In addition, cases with incomplete information on any of these characteristics and patients who survived less than one month were excluded from the study. Additionally, to focus on breast cancer-specific mortality, patients with an unknown cause of death or whose death was attributed to other causes were excluded.
 
 ## Statistical Analysis
+
+Clinicopatholical characteristics were compared between IBC subtype using Pearson's Chi-squared test. Median, 1-year, 5-year, and 10-year survival for IBC is estimated for each variable in the analysis using the Kaplain-Meier method and variables were compared using the log-rank test in the subgroups. Univariate and multivariate Cox proportional hazards regressions were used to model the relationship between potential covariates and IBC-specific survival. We obtained hazard ratios (HR) and 95% confidence intervals for each covariate. All statistical analyses were performed using the survival package in R version 4.3.3.
 
 # Results
 
 ## Clinicopathological characteristics
+
+A total of 5969 adult female IBC cases were eligible during 2010-2021 in the SEER database for our study population. Of these, 1829 were excluded; 165 had a survival time less than 1 month, 487 had an unknown or competing cause of death, and 1177 had incomplete information. The remaining 4140 were included in our analysis, as shown in Table 1. The clinicopathological characteristics of the eligible patients are shown in Table 2.
+
+## Survival Analysis
+
+
 
 ## Univariate Analysis
 
