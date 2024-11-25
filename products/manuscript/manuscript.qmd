@@ -2,6 +2,8 @@
 title: "epid 8010 manuscript"
 author: " "
 format: pdf
+bibliography:
+  - "refs.bib"
 ---
 
 ```{r setup, include=FALSE}
@@ -31,62 +33,39 @@ seer <- readr::read_rds(here::here("data", "processed", "seer.rds"))
 
 # Abstract
 
-**Background:** 
+**Background:**
 
-**Methods:** 
+**Methods:**
 
-**Results:** 
+**Results:**
 
-**Conclusions:** 
+**Conclusions:**
 
-**Keywords:** 
+**Keywords:**
 
 \pagebreak
 
 # Introduction
 
-Inflammatory breast carcinoma (IBC) is a rare but aggressive subtype of breast cancer. Reportedly, IBC accounts for only 1% to 6% of breast cancer cases in the United States, yet it was responsible for 10% of all types of breast cancer-related deaths (Zhu)
+Inflammatory breast cancer (IBC) is a rare but aggressive subtype of breast cancer, accounting for 2% to 6% of all breast cancer cases in the United States [@devi2019perspectives; @hance2005trends]. IBC presents differently than other types of breast cancer. It often lacks a breast lump and may not appear on a mammogram, making accurate diagnosis challenging and potentially delaying treatment. IBC causes symptoms of breast inflammation, such as swelling and redness, due to cancer cells blocking lymphatic vessels in the skin, giving the breast an "inflamed" appearance [@menta2018inflammatory].
 
-Inflammatory breast cancer (IBC) is a rare and aggressive variant of stage IIID breast cancer, with increased likelihood of metastasis upon diagnosis relative to non-inflammatory breast cancer. (Abraham)
+Clinically, IBC is categorized as T4d in the TNM classification for its aggressive biological behavior. In spite of multimodal therapy, IBC has a local recurrence rate of up to 50% and survival rates of only 35% to 40%, significantly lower than those of other types of breast cancer [@robertson2010inflammatory]. Despite its rarity, IBC disproportionately accounts for up to 10% of all breast cancer-related deaths [@devi2019perspectives; @hance2005trends].
 
-Inflammatory breast cancer (IBC) is undoubtedly a unique biologic subtype of breast cancer with poor prognosis, which accounts for 1e5% of all breast cancer and comprises 7.0% of all breast cancerspecific mortality. (Pan)
+Because IBC is rare, the biological characteristics of IBC are not commonly reported and the molecular alterations that result in poor prognosis are not well understood. However, hormone receptors (HR) and human epidermal growth factor receptor-2 (HER2), which define the molecular status of IBC through immunohistochemistry (IHC), are fundamental markers used to demonstrate molecular features, predict prognosis, and optimize therapeutic regimens [@li2017outcomes]. IBC tumors are characterized by combinations of hormone receptors and oncogenes, allowing the majority to be characterized as HR+/HER2- (Luminal A), HR+/HER+ (Luminal B), HR-/HER2+ (HER2 Positive), and Triple Negative by IHC.[@TCR28003]. Studies have shown that these four molecular subtypes reveal the prognostic discrepancies in both common breast cancers and IBC [@robertson2010inflammatory; @le2015future; @tolaney2015adjuvant; @iwamoto2011different]. A previous study examined the association between molecular subtypes and survival outcomes in IBC patients from 2010 to 2013 [@li2017outcomes]. However, no updated population-based studies have investigated this relationship.
 
-According to the TNM classification, IBC is classified as T4d (a category reserved for IBC) for its aggressive biological behaviour. With great efforts to improve survival, including advancements in surgical technique, targeted therapy, radiotherapy and chemotherapy and improvements in supportive treatment, the prognosis of IBC has increased (Pan)
-
-Although IBC demonstrates an inflammatory appearance, it is caused by cancer cells obstructing the dermal lymphatics of the breasts. (Zhu)
-
-IBC is categorized as T4d (a category designated for IBC) in the TNM classification with its biologically aggressive character. With the application of a multimodal therapy strategy that includes systemic neoadjuvant chemotherapy, surgery, and radiotherapy, the clinical outcomes of IBC have significantly improved. (Zhu)
-
-However, the approximately 35% to 40% 5-year cumulative survival rate is much lower compared with other breast cancers. (Zhu)
-
-Historically, single-modality treatment to cure IBC was not successful; 90% of patients developed recurrent and/or metastatic disease within 2 years, and the 5-year survival rate was 5%. Combinations of neoadjuvant systemic chemotherapy, surgery, and radiation therapy have led to an improved prognosis. However, the overall 5-year survival rate for patients with IBC is still very low, at 30% (Yamauchi)
-
-The aim of this paper is to determine the effect of cancer subtype on survival in adult femaes with IBC.
-
-"T4 (includes T4a, T4b, T4c, and T4d): Tumor of any size growing into the chest wall or skin. This includes inflammatory breast cancer." https://www.cancer.org/cancer/types/breast-cancer/understanding-a-breast-cancer-diagnosis/stages-of-breast-cancer.html#:~:text=T1%20(includes%20T1a%2C%20T1b%2C,the%20chest%20wall%20or%20skin.
-
-"Inflammatory breast cancer (IBC) is rare. It accounts for only 1% to 5% of all breast cancers. Although it is a type of invasive ductal carcinoma, its symptoms, outlook, and treatment are different. IBC causes symptoms of breast inflammation like swelling and redness, which is caused by cancer cells blocking lymph vessels in the skin causing the breast to look "inflamed." " https://www.cancer.org/cancer/types/breast-cancer/about/types-of-breast-cancer/inflammatory-breast-cancer.html
-
-"IBC doesn't look like a typical breast cancer. It often does not cause a breast lump, and it might not show up on a mammogram. This makes it harder to diagnose., IBC tends to occur in younger women (younger than 40 years of age)., Black women appear to develop IBC more often than White women., IBC is more common among women who are overweight or obese. IBC tends to be more aggressive—it grows and spreads much more quickly—than more common types of breast cancer., IBC is always at least at a locally advanced stage when it’s first diagnosed because the breast cancer cells have grown into the skin. (This means it is at least stage III.), In about 1 of 3 cases, IBC has already spread (metastasized) to distant parts of the body when it is diagnosed. This makes it harder to treat successfully., Women with IBC tend to have a worse prognosis (outcome) than women with other common types of breast cancer." https://www.cancer.org/cancer/types/breast-cancer/about/types-of-breast-cancer/inflammatory-breast-cancer.html
-
-"All inflammatory breast cancers start as stage III (T4dNXM0) since they involve the skin. If the cancer has spread outside the breast to distant parts of the body, it is stage IV." https://www.cancer.org/cancer/types/breast-cancer/about/types-of-breast-cancer/inflammatory-breast-cancer.html
-
-"Inflammatory breast cancer (IBC) that has not spread outside the breast is stage III. In most cases, treatment is chemotherapy first to try to shrink the tumor, followed by surgery to remove the cancer. Radiation and often other treatments, like more chemotherapy or targeted drug therapy, are given after surgery. Because IBC is so aggressive, breast conserving surgery (lumpectomy) and sentinel lymph node biopsy are typically not part of the treatment. IBC that has spread to other parts of the body (stage IV) may be treated with chemotherapy, hormone therapy, and/or targeted drugs." https://www.cancer.org/cancer/types/breast-cancer/about/types-of-breast-cancer/inflammatory-breast-cancer.html
-
-"The most common and widely accepted classification of breast cancer is from an immunohistochemical perspective, based on the expression of the following hormone receptors: estrogen (ER), progesterone (PR) and human epidermal growth factor (HER2). Accordingly, the following four subtypes of breast cancer are widely recognized: luminal A, luminal B, HER2-positive, and triple-negative. " https://www.ncbi.nlm.nih.gov/books/NBK583808/#:~:text=Accordingly%2C%20the%20following%20four%20subtypes,positive%2C%20and%20triple%2Dnegative.
-
-"Breast cancer has four primary molecular subtypes, defined in large part by hormone receptors (HR) and other types of proteins involved (or not involved) in each cancer: Luminal A or HR+/HER2- (HR-positive/HER2-negative) Luminal B or HR+/HER2+ (HR-positive/HER2-positive) Triple-negative or HR-/HER2- (HR/HER2-negative) HER2-positive" https://www.cancercenter.com/cancer-types/breast-cancer/types/breast-cancer-molecular-types#:~:text=Breast%20cancer%20has%20four%20primary,(HR%2FHER2%2Dnegative)
-
-
-
+Therefore, using the most recent Surveillance, Epidemiology, and End Results (SEER) data, this study aims to assess the effect of IBC molecular subtype on breast cancer-specific mortality in adult females with IBC.
 
 # Methods
 
+The National Cancer Institute's Surveillance, Epidemiology, and End Results (SEER) database is an authoritative source of information on cancer incidence and survival in the United States. SEER currently collects and publishes cancer incidence and survival data from population-based cancer registries covering approximately 48% of the U.S. population. This study utilized SEER incidence data from 2010 to 2021.
+
 ## Study Population
 
-
+The study population focuses on adult females diagnosed with IBC. Data was extracted from the SEER 17 Registries (2000-2021) using the SEER\*Stat software (version 8.4.4; Surveillance Research Program, NCI, Bethesda, MD). The specific criteria used to identify patients with IBC were as follows: (1) Site and Morphology (TNM 7/CS v0204 Schema recode) was limited to "Breast"; (2) Derived TNM classification, AJCC 7th edition (2010-2015) was limited to "T4d", SEER Combined T (2016-2017) was limited to "c2D" and "p4D", and EOD 8th edition (2018+) was limited to "T4D"; and (3) Histology type (ICD-O-3) ranged from 8500 to 8549. Year of diagnosis was limited to 2010 to 2021 because SEER started collecting breast cancer molecular subtype in 2010. To limit our data to adult females, age at diagnosis was limited to patents 20 years and older and sex was limited to "Female".
 
 ## Variables
+
+For each case, the following information from SEER was obtained: age at diagnosis (20-49, 50-69, and \$\ge\$70), race (white, black, other), marital status (unmarried, married), N stage (N0, N1, N2, N3), M stage (M0, M1), grade (I/II, III/IV), radiation (no/unknown, yes), chemotherapy (no/unknown, yes), surgery (no/unknown, yes), survival months, cause-specific death classification (Alive or dead of other cause, Dead (attributable to this cancer dx), Dead (missing/unknown COD)), and other cause of death classification (Alive or dead due to cancer, Dead (attributable to causes other than this cancer dx), Dead (missing/unknown COD)). In addition, cases were excluded from the study if they had incomplete information on any of these characteristics. Patients who survived less than one month were also excluded. To limit our analysis to breast cancer-specific mortality, patients with unknown cause of death or patients with cause of death to another casue were excluded.
 
 ## Statistical Analysis
 
@@ -99,8 +78,3 @@ The aim of this paper is to determine the effect of cancer subtype on survival i
 ## Multivariate Analysis
 
 # Discussion
-
-
-
-
-

@@ -40,6 +40,8 @@ The exact filtering input is:
 
 The specific criteria to identify patients with inflammatory breast cancer (IBC) is as follows:
 
+11/25 Flow chart needs to be reworked.
+
 1.  Site and Morphology was limited to "Breast" (TNM 7/CS V0204+ SCHEMA RECODE)
 2.  Derived TNM classification, AJCC 7th edition (2010-2015) was limited to "T4d", and Derived SEER combined T (2016-2017) was limited to "cT4D" and "pT4D", and Derived EOD 2018 T (2018+) was limited to "T4D". This is what limits to IBC.
 3.  UPDATE: The literature suggests limiting by IDC-O-3 type 8500-8549 Age was limited to 20 years and older to target adult women.
