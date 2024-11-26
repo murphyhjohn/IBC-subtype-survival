@@ -80,11 +80,7 @@ t3 <-
   gtsummary::tbl_merge(
     list(t3_uv, t3_mv),
     tab_spanner = c("Crude", "Adjusted")
-  ) |>
-  gtsummary::modify_caption(
-    "Table 3: Cox Proportional Hazards Regression <br> Model for Survival in Adult Women with IBC"
   )
-t3
 
 gt::gtsave(
   data = t3 |> gtsummary::as_gt(),

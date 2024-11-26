@@ -52,9 +52,6 @@ t1 <-
   ) |>
   gtsummary::add_overall() |>
   gtsummary::add_p() |>
-  gtsummary::modify_caption(
-    "Table 1: Clinicopathological characteristics by cancer subtype"
-  ) |>
   gtsummary::as_gt()
 
 # save to png

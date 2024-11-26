@@ -28,10 +28,7 @@ t2 <- tbl_survfit(
   statistic = "{estimate}",
   times = c(0, 12, 60, 120)
   ) |>
-  add_p() |>
-  gtsummary::modify_caption(
-    "Table 2: Survival for IBC by Demographics <br> and Clinicopathologic Characteristics"
-  )
+  add_p()
 
 # create and assign more descriptive labels
 labels = c(
