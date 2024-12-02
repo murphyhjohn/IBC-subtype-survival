@@ -99,7 +99,7 @@ knitr::include_graphics(
 
 ## Proportional Hazards Assumption
 
-The proportional hazards assumption was assessed for each covariate visually using log-log plot, as shown in Figure 2.
+The proportional hazards assumption was assessed for each covariate visually using log minus log plots, as shown in Figure 2.
 
 ```{r}
 #| label: fig-flowchart
@@ -112,10 +112,7 @@ knitr::include_graphics(
 )
 ```
 
-Upon inspection, there may be slight deviations from parallelity in the covariates subtype, radiation, chemotherapy, and surgery. Thus, the full Cox proportional hazards model is fit to the data and Schoenfeld residuals are extracted.  The correlation between Schoenfeld residuals and ranked survival times for each covariate is shown in Table 2.
-
-
-
+Upon inspection, slight deviations from parallelism were observed for the covariates subtype, radiation, chemotherapy, and surgery. Therefore, the full Cox proportional hazards model was fitted to the data, and Schoenfeld residuals were extracted.  The correlation between Schoenfeld residuals and ranked survival times for each covariate is presented in Table 2.
 
 
 

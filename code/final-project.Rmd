@@ -204,29 +204,6 @@ rownames(cor_df) <- c(
   "surgery"
 )
 
-# table 3: Correlation between Schoenfeld residuals and ranked survival time
-t3_raw <- cor_df %>%
-  add_row(Correlation = "", P_Value = "", .before = 1) %>%
-  add_row(Correlation = "", P_Value = "", .before = 1) %>%
-  add_row(Correlation = "", P_Value = "", .before = 6) %>%
-  add_row(Correlation = "", P_Value = "", .before = 6) %>%
-  add_row(Correlation = "", P_Value = "", .before = 10) %>%
-  add_row(Correlation = "", P_Value = "", .before = 10) %>%
-  add_row(Correlation = "", P_Value = "", .before = 14) %>%
-  add_row(Correlation = "", P_Value = "", .before = 14) %>%
-  add_row(Correlation = "", P_Value = "", .before = 17) %>%
-  add_row(Correlation = "", P_Value = "", .before = 17) %>%
-  add_row(Correlation = "", P_Value = "", .before = 20) %>%
-  add_row(Correlation = "", P_Value = "", .before = 20) %>%
-  add_row(Correlation = "", P_Value = "", .before = 23) %>%
-  add_row(Correlation = "", P_Value = "", .before = 23) %>%
-  add_row(Correlation = "", P_Value = "", .before = 26) %>%
-  add_row(Correlation = "", P_Value = "", .before = 26) %>%
-  add_row(Correlation = "", P_Value = "", .before = 29) %>%
-  add_row(Correlation = "", P_Value = "", .before = 29) %>%
-  add_row(Correlation = "", P_Value = "", .before = 32) %>%
-  add_row(Correlation = "", P_Value = "", .before = 32)
-  
 
   
 
