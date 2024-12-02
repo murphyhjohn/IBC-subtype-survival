@@ -63,15 +63,11 @@ The study population focuses on adult females diagnosed with IBC. Data was extra
 
 ## Variables
 
-For each case, the following information from SEER was obtained: age at diagnosis (20-49, 50-69, and \>=70), race (white, black, other), marital status (unmarried, married), N stage (N0, N1, N2, N3), M stage (M0, M1), grade (I/II, III/IV), radiation (no/unknown, yes), chemotherapy (no/unknown, yes), surgery (no/unknown, yes), survival months, cause-specific death classification (Alive or dead of other cause, Dead (attributable to this cancer), Dead (missing/unknown COD)), and other cause of death classification (Alive or dead due to cancer, Dead (attributable to causes other than this cancer), Dead (missing/unknown COD)). Breast cancer subtypes were classified as Luminal A (HR+/HER2-), Luminal B (HR+/HER+), HER2 positive (HR-/HER2+), and Triple Negative. In addition, cases with incomplete information on any of these characteristics and patients who survived less than one month were excluded from the study. Additionally, to focus on breast cancer-specific mortality, patients with an unknown cause of death or whose death was attributed to other causes were excluded.
+For each case, the following information from SEER was obtained: age at diagnosis (20-49, 50-69, and \>=70), race (white, black, other), marital status (unmarried, married), N (node) stage (N0, N1, N2, N3), M (metastasis) stage (M0, M1), grade (I/II, III/IV), radiation (no/unknown, yes), chemotherapy (no/unknown, yes), surgery (no/unknown, yes), survival months, cause-specific death classification (Alive or dead of other cause, Dead (attributable to this cancer), Dead (missing/unknown COD)), and other cause of death classification (Alive or dead due to cancer, Dead (attributable to causes other than this cancer), Dead (missing/unknown COD)). Breast cancer subtypes were classified as Luminal A (HR+/HER2-), Luminal B (HR+/HER+), HER2 positive (HR-/HER2+), and Triple Negative. In addition, cases with incomplete information on any of these characteristics and patients who survived less than one month were excluded from the study. To focus on IBC-specific mortality, patients with an unknown cause of death or whose death was attributed to other causes were excluded.
 
 ## Statistical Analysis
 
-Clinicopatholical characteristics were compared between IBC subtype using Pearson's Chi-squared test. Median, 1-year, 5-year, and 10-year survival for IBC is estimated for each variable in the analysis using the Kaplain-Meier method and variables were compared using the log-rank test in the subgroups.
-
-### Proportional Hazards Assumption
-
-Univariate and multivariate Cox proportional hazards regressions were used to model the relationship between potential covariates and IBC-specific survival. We obtained hazard ratios (HR) and 95% confidence intervals for each covariate. All statistical analyses were performed using the survival package in R version 4.3.3.
+Clinicopathological characteristics were compared between IBC subtype using Pearson's Chi-squared test. Median, 1-year, 5-year, and 10-year survival for IBC is estimated for each variable in using the Kaplain-Meier method and compared using the log-rank test in the subgroups. The proportional hazards assumption was assessed visually with log-log plots and statistically by calculating Schoenfeld residuals and the Pearson's product moment correlation coefficient of the Schoenfeld residuals and ranked survival times. After determining the assumption of proportional hazard was met, univariate and multivariate Cox proportional hazards regressions were used to model the relationship between potential covariates and IBC-specific survival. We obtained hazard ratios (HR) and 95% confidence intervals for each covariate. All statistical analyses were performed using the survival package in R version 4.3.3.
 
 # Results
 
@@ -100,6 +96,28 @@ knitr::include_graphics(
 	here::here("results", "tables", "t1.png")
 )
 ```
+
+## Proportional Hazards Assumption
+
+The proportional hazards assumption was assessed for each covariate visually using log-log plot, as shown in Figure 2.
+
+```{r}
+#| label: fig-flowchart
+#| fig-cap: |
+#|   [Log-log plots]{color="#FF2400"}
+#| out.width: 100%
+#| out.height: 80%
+knitr::include_graphics(
+	here::here("results", "figures", "loglog_plot.png")
+)
+```
+
+Upon inspection, there may be slight deviations from parallelity in the covariates subtype, radiation, chemotherapy, and surgery. Thus, the full Cox proportional hazards model is fit to the data and Schoenfeld residuals are extracted.  The correlation between Schoenfeld residuals and ranked survival times for each covariate is shown in Table 2.
+
+
+
+
+
 
 ## Survival Analysis
 
