@@ -16,6 +16,7 @@ knitr::opts_chunk$set(
 library(yaml, include.only = NULL)
 library(knitr, include.only = NULL)
 library(here)
+library(flextable)
 
 # Loading data to present in text
 seer <- readr::read_rds(here::here("data", "processed", "seer.rds"))
@@ -61,7 +62,7 @@ For each case, the following information from SEER was obtained: age at diagnosi
 
 Clinicopathological characteristics were compared between IBC subtype using Pearson's Chi-squared test. Median, 1-year, 5-year, and 10-year survival for IBC is estimated for each variable in using the Kaplain-Meier method and compared using the log-rank test in the subgroups. The proportional hazards assumption was assessed visually with log-log plots and statistically by calculating Schoenfeld residuals and the Pearson's product moment correlation coefficient of the Schoenfeld residuals and ranked survival times. After determining the assumption of proportional hazard was met, univariate and multivariate Cox proportional hazards regressions were used to model the relationship between potential covariates and IBC-specific survival. We obtained hazard ratios (HR) and 95% confidence intervals for each covariate. All statistical analyses were performed using the survival package in R version 4.3.3.
 
-\clearpage
+\pagebreak
 
 # Results
 
@@ -87,13 +88,12 @@ The clinicopathological characteristics of eligible patients are summarized in @
 #| tbl-cap: |
 #|   [Clinicopathological characteristics by cancer subtype]{color="#FF2400"}
 #| echo: false
+#| results: asis
 
-knitr::include_graphics(
-	here::here("results", "tables", "t1.rds")
-)
+t1 <- readRDS(file = here::here("results/tables", "t1.rds"))
+t1
+
 ```
-
-\clearpage
 
 ## Proportional Hazards Assumption
 
@@ -109,21 +109,22 @@ knitr::include_graphics(
 )
 ```
 
+\clearpage
+
 Upon inspection, slight deviations from parallelism were observed for the covariates subtype, grade radiation, chemotherapy, and surgery. Therefore, the full Cox proportional hazards model was fitted to the data, and Schoenfeld residuals were extracted. The correlation between Schoenfeld residuals and ranked survival times for each covariate is presented in @tbl-table2.
 
 ```{r}
 #| label: tbl-table2
 #| tbl-cap: |
 #|   [Schoenfeld Residual and Ranked Survival Time Correlation]{color="#FF2400"}
-#| out.width: 40%
-knitr::include_graphics(
-	here::here("results", "tables", "t2.png")
-)
+#| echo: false
+#| results: asis
+
+t2 <- readRDS(file = here::here("results/tables", "t2.rds"))
+t2
 ```
 
 While the p-values for the covariates triple negative subtype, grade, radiation, chemotherapy, and surgery are statistically significant at the 0.05 level, the observed correlations are not of large magnitude. Specifically, the correlations are -0.128, -0.042, 0.070, 0.110, and 0.074, respectively. Given that these values are relatively small in magnitude, we proceed with the Cox proportional hazards regression model.
-
-\clearpage
 
 ## Survival Analysis
 

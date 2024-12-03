@@ -44,14 +44,17 @@ covariates <- c("Luminal B", "Triple Negative", "HER2 Positive",
 cor <- data.frame(
   Variable = covariates,
   Correlation = apply(resid$y, 2, \(x) round(cor.test(rank(resid$time), x)$estimate, 3)),
-  p.value = apply(resid$y, 2, \(x) {
+  `p-value` = apply(resid$y, 2, \(x) {
     p <- round(cor.test(rank(resid$time), x)$p.value, 3)
     ifelse(p == 0, "<0.001", p)
   })
 )
 
-t2 <- cor %>% gt()
+t2 <- gtsummary::as_tibble(cor)
 
-# save as png
-gtsave(data = t2, filename = "results/tables/t2.png")
+# Convert to a flextable
+t2_flex <- flextable::flextable(t2)
+t2_flex <- flextable::fontsize(t2_flex, size = 7.5, part = "all")
+# Save the flextable object as RDS
+saveRDS(t2_flex, file = here::here("results/tables", "t2.rds"))
 

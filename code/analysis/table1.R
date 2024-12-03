@@ -2,34 +2,27 @@
 # (unadjusted associations between covariates and exposure)
 
 # Declare dependencies
-box::use(
-  readr,
-  here,
-  gt,
-  gtExtras,
-  gtsummary,
-  modelsummary,
-  dplyr,
-  webshot2,
-  tidyr,
-  ggplot2,
-  Hmisc,
-  flextable
-)
+library(here)
+library(readr)
+library(gt)
+library(gtsummary)
+library(gtExtras)
+library(flextable)
+library(stringr)
 
 # load data
 seer <- readRDS("data/processed/seer_tab.rds")
 attach(seer)
 
 # create table 1
-t1 <-
+t1 <- gtsummary::as_tibble(
   seer |>
   gtsummary::tbl_summary(
     by = subtype,
     include = c(agecat, race, marriage_status, n_stage, m_stage,
                 gradecat, radiation, chemotherapy, surgery),
     label = list(
-      agecat ~ "Age at diagnosis",
+      agecat ~ "Age",
       race ~ "Race",
       marriage_status ~ "Marital Status",
       n_stage ~ "N Stage",
@@ -52,17 +45,14 @@ t1 <-
                gradecat, radiation, chemotherapy, surgery) ~ c(0, 1),
   ) |>
   gtsummary::add_overall() |>
-  gtsummary::add_p() |>
-  gtsummary::as_gt()
-
-# save to png
-gt::gtsave(
-  data = t1,
-  filename = here::here("results/tables", "t1.png"),
-  vwidth = 2400,
-  vheight = 1350
+  gtsummary::add_p()
 )
 
-# save to rds
-t1_flex <- flextable::qflextable(t1)
-saveRDS(t1_flex, file = "results/tables/t1.rds")
+# Remove Markdown bold (`**`) from the tibble text
+colnames(t1) <- stringr::str_remove_all(colnames(t1), "\\*\\*")
+
+# Convert the data frame to a flextable
+t1_flex <- flextable::flextable(t1)
+t1_flex <- flextable::fontsize(t1_flex, size = 7.5, part = "all")
+# Save the flextable object as RDS
+saveRDS(t1_flex, file = here::here("results/tables", "t1.rds"))
