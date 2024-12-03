@@ -3,6 +3,7 @@
 library(survival)
 library(dplyr)
 library(gtsummary)
+library(gt)
 
 # load data
 seer <- readRDS("data/processed/seer.rds")
@@ -14,7 +15,7 @@ model <- coxph(
     relevel(factor(subtype), ref = '0') +
     relevel(factor(age), ref = '0') + 
     relevel(factor(race), ref = '0') +
-    relevel(factor(marriage_status),ref='9') + 
+    relevel(factor(marriage_status),ref='0') + 
     relevel(factor(n_stage),ref='0') + 
     relevel(factor(m_stage),ref='0') +
     relevel(factor(grade), ref='0') +
@@ -27,21 +28,30 @@ model <- coxph(
 # extract Schoenfeld residuals
 resid <- cox.zph(model, terms = FALSE)
 
-# get the correlations between residuals and ranked survival times
-cor <- data.frame(apply(resid$y, 2, \(x) cor.test(rank(resid$time), x)$estimate))
-
 # clean up to present in table
-rownames(cor) <- c("Luminal B", "Triple Negative", "HER2 Positive", 
-               "50-69 years", ">=70 years",
-               "Black", "Other",
-               "Married",
-               "N1", "N2", "N3",
-               "M1",
-               "III/IV",
-               "Radiation: Yes",
-               "Chemotherapy: Yes",
-               "Surgery: Yes")
-colnames(cor) <- "correlation"  
+covariates <- c("Luminal B", "Triple Negative", "HER2 Positive", 
+                "50-69 years", ">=70 years",
+                "Black", "Other",
+                "Married",
+                "N1", "N2", "N3",
+                "M1",
+                "Grade: III/IV",
+                "Radiation: Yes",
+                "Chemotherapy: Yes",
+                "Surgery: Yes")
 
-t2 <- gtsummary::tbl_summary(cor)
+# get the correlations between residuals and ranked survival times
+cor <- data.frame(
+  Variable = covariates,
+  Correlation = apply(resid$y, 2, \(x) round(cor.test(rank(resid$time), x)$estimate, 3)),
+  p.value = apply(resid$y, 2, \(x) {
+    p <- round(cor.test(rank(resid$time), x)$p.value, 3)
+    ifelse(p == 0, "<0.001", p)
+  })
+)
+
+t2 <- cor %>% gt()
+
+# save as png
+gtsave(data = t2, filename = "results/tables/t2.png")
 

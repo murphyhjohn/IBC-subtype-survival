@@ -1,6 +1,6 @@
 ---
-title: "epid 8010 manuscript"
-author: " "
+title: "Impact of Molecular Subtype on Inflammatory Breast Cancer-Specific Mortality in Adult Women"
+author: "Murphy John"
 format: pdf
 bibliography:
   - "refs.bib"
@@ -20,14 +20,6 @@ library(here)
 # Loading data to present in text
 seer <- readr::read_rds(here::here("data", "processed", "seer.rds"))
 ```
-
-**Author**
-
-Murphy John$^{1}$
-
-**Author affiliation**
-
-1.  Department of Epidemiology and Biostatistics, University of Georgia, Athens, GA, USA.
 
 \pagebreak
 
@@ -51,7 +43,7 @@ Clinically, IBC is categorized as T4d in the TNM classification for its aggressi
 
 Because IBC is rare, the biological characteristics of IBC are not commonly reported and the molecular alterations that result in poor prognosis are not well understood. However, hormone receptors (HR) and human epidermal growth factor receptor-2 (HER2), which define the molecular status of IBC through immunohistochemistry (IHC), are fundamental markers used to demonstrate molecular features, predict prognosis, and optimize therapeutic regimens [@li2017outcomes]. IBC tumors are characterized by combinations of hormone receptors and oncogenes, allowing the majority to be characterized as Luminal A (HR+/HER2-), Luminal B (HR+/HER+), HER2 Positive (HR-/HER2+), and Triple Negative by IHC.[@TCR28003]. Studies have shown that these four molecular subtypes reveal the prognostic discrepancies in both common breast cancers and IBC [@robertson2010inflammatory; @le2015future; @tolaney2015adjuvant; @iwamoto2011different]. A previous study examined the association between molecular subtypes and survival outcomes in IBC patients from 2010 to 2013 [@li2017outcomes]. However, no updated population-based studies have investigated this relationship.
 
-Therefore, using the most recent Surveillance, Epidemiology, and End Results (SEER) data, this study aims to assess the effect of IBC molecular subtype on breast cancer-specific mortality in adult females with IBC.
+Therefore, using the most recent Surveillance, Epidemiology, and End Results (SEER) data, this study aims to assess the effect of molecular subtype on IBC-specific mortality in adult females with IBC.
 
 # Methods
 
@@ -69,75 +61,94 @@ For each case, the following information from SEER was obtained: age at diagnosi
 
 Clinicopathological characteristics were compared between IBC subtype using Pearson's Chi-squared test. Median, 1-year, 5-year, and 10-year survival for IBC is estimated for each variable in using the Kaplain-Meier method and compared using the log-rank test in the subgroups. The proportional hazards assumption was assessed visually with log-log plots and statistically by calculating Schoenfeld residuals and the Pearson's product moment correlation coefficient of the Schoenfeld residuals and ranked survival times. After determining the assumption of proportional hazard was met, univariate and multivariate Cox proportional hazards regressions were used to model the relationship between potential covariates and IBC-specific survival. We obtained hazard ratios (HR) and 95% confidence intervals for each covariate. All statistical analyses were performed using the survival package in R version 4.3.3.
 
+\clearpage
+
 # Results
 
 ## Clinicopathological characteristics
 
-A total of 5969 adult female IBC cases were eligible during 2010-2021 in the SEER database for our study population. Of these, 1829 were excluded; 165 had a survival time less than 1 month, 487 had an unknown or competing cause of death, and 1177 had incomplete information. The remaining 4140 were included in our analysis, as shown in Figure 1.
+A total of 5969 adult female IBC cases were eligible during 2010-2021 in the SEER database for our study population. Of these, 1829 were excluded; 165 had a survival time less than 1 month, 487 had an unknown or competing cause of death, and 1177 had incomplete information. The remaining 4140 were included in our analysis, as shown in @fig-flowchart.
 
 ```{r}
 #| label: fig-flowchart
 #| fig-cap: |
 #|   [Flowchart of IBC patients screening on SEER database]{color="#FF2400"}
-#| out.width: 100%
-#| out.height: 80%
+#| out.width: 90%
+#| out.height: 70%
 knitr::include_graphics(
 	here::here("results", "figures", "flowchart.png")
 )
 ```
 
-The clinicopathological characteristics of eligible patients are summarized in Table 1. The age subgroup of 20–49 years accounts for 35.1% of Luminal B cases, a higher proportion compared to other subtypes. Moreover, Luminal B and HER2-positive subtypes appear to affect younger age groups more frequently than Luminal A, with 85.4% and 84.5% of cases, respectively, occurring in patients under 69 years, compared to 76.5% for Luminal A. A higher proportion of Black patients is observed in the Triple-Negative group compared to other subtypes. Marital status analysis shows that the Triple-Negative group has the highest percentage of unmarried women. Triple-Negative cases also have the highest percentage of N3 node stage and exhibit the greatest proportion of grade III/IV cases.
+The clinicopathological characteristics of eligible patients are summarized in @tbl-table1. The age subgroup of 20–49 years accounts for 35.1% of Luminal B cases, a higher proportion compared to other subtypes. Moreover, Luminal B and HER2-positive subtypes appear to affect younger age groups more frequently than Luminal A, with 85.4% and 84.5% of cases, respectively, occurring in patients under 69 years, compared to 76.5% for Luminal A. A higher proportion of Black patients is observed in the Triple-Negative group compared to other subtypes. Marital status analysis shows that the Triple-Negative group has the highest percentage of unmarried women. Triple-Negative cases also have the highest percentage of N3 node stage and exhibit the greatest proportion of grade III/IV cases.
 
 ```{r}
 #| label: tbl-table1
 #| tbl-cap: |
 #|   [Clinicopathological characteristics by cancer subtype]{color="#FF2400"}
+#| echo: false
+
 knitr::include_graphics(
-	here::here("results", "tables", "t1.png")
+	here::here("results", "tables", "t1.rds")
 )
 ```
 
+\clearpage
+
 ## Proportional Hazards Assumption
 
-The proportional hazards assumption was assessed for each covariate visually using log minus log plots, as shown in Figure 2.
+The proportional hazards assumption was assessed for each covariate visually using log minus log plots, as shown in @fig-loglog.
 
 ```{r}
-#| label: fig-flowchart
+#| label: fig-loglog
 #| fig-cap: |
-#|   [Log-log plots]{color="#FF2400"}
+#|   [Log minus log plots]{color="#FF2400"}
 #| out.width: 100%
-#| out.height: 80%
 knitr::include_graphics(
 	here::here("results", "figures", "loglog_plot.png")
 )
 ```
 
-Upon inspection, slight deviations from parallelism were observed for the covariates subtype, radiation, chemotherapy, and surgery. Therefore, the full Cox proportional hazards model was fitted to the data, and Schoenfeld residuals were extracted.  The correlation between Schoenfeld residuals and ranked survival times for each covariate is presented in Table 2.
-
-
-
-## Survival Analysis
-
-Table 2 presents the median survival in years, along with 1-, 5-, and 10-year survival percentages, stratified by clinicopathological characteristics, all of which show statistically significant differences based on the log-rank test. Survival outcomes differ significantly by subtype, with the Triple-Negative subtype showing the poorest prognosis, including a median survival of 1.7 years and 1-, 5-, and 10-year survival rates of 67%, 24%, and 21%, respectively. Conversely, the Luminal B subtype has the most favorable outcomes, with a median survival of 9.4 years and a 10-year survival rate of 50%. Racial disparities are evident, as Black patients have the poorest survival outcomes, with a median survival of 2.4 years compared to 4.6 years for White patients and 5.4 years for patients of other races. Unmarried women experience poorer survival compared to married women. Although 1-year survival is similar across all node stages, nodal involvement significantly affects long-term outcomes, with the N3 stage showing the lowest median survival of 2.7 years and the poorest 5- and 10-year survival rates. Survival differences are also pronounced by distant metastasis (M stage), with M1 stage associated with worse outcomes. Additionally, higher cancer grades correlate with poorer survival. In terms of treatment, patients who receive radiation, chemotherapy, or surgery exhibit better survival outcomes across all measurements.
+Upon inspection, slight deviations from parallelism were observed for the covariates subtype, grade radiation, chemotherapy, and surgery. Therefore, the full Cox proportional hazards model was fitted to the data, and Schoenfeld residuals were extracted. The correlation between Schoenfeld residuals and ranked survival times for each covariate is presented in @tbl-table2.
 
 ```{r}
 #| label: tbl-table2
 #| tbl-cap: |
-#|   [Survival for IBC by Clinicopathological Characteristics]{color="#FF2400"}
+#|   [Schoenfeld Residual and Ranked Survival Time Correlation]{color="#FF2400"}
+#| out.width: 40%
 knitr::include_graphics(
 	here::here("results", "tables", "t2.png")
 )
 ```
 
-We conducted univariate and multivariate analyses based on the data in Table 2, with the results of the Cox proportional hazards regression presented in Table 3.
+While the p-values for the covariates triple negative subtype, grade, radiation, chemotherapy, and surgery are statistically significant at the 0.05 level, the observed correlations are not of large magnitude. Specifically, the correlations are -0.128, -0.042, 0.070, 0.110, and 0.074, respectively. Given that these values are relatively small in magnitude, we proceed with the Cox proportional hazards regression model.
+
+\clearpage
+
+## Survival Analysis
+
+@tbl-table3 presents the median survival in years, along with 1-, 5-, and 10-year survival percentages, stratified by clinicopathological characteristics, all of which show statistically significant differences based on the log-rank test. Survival outcomes differ significantly by subtype, with the Triple-Negative subtype showing the poorest prognosis, including a median survival of 1.7 years and 1-, 5-, and 10-year survival rates of 67%, 24%, and 21%, respectively. Conversely, the Luminal B subtype has the most favorable outcomes, with a median survival of 9.4 years and a 10-year survival rate of 50%. Racial disparities are evident, as Black patients have the poorest survival outcomes, with a median survival of 2.4 years compared to 4.6 years for White patients and 5.4 years for patients of other races. Unmarried women experience poorer survival compared to married women. Although 1-year survival is similar across all node stages, nodal involvement significantly affects long-term outcomes, with the N3 stage showing the lowest median survival of 2.7 years and the poorest 5- and 10-year survival rates. Survival differences are also pronounced by distant metastasis (M stage), with M1 stage associated with worse outcomes. Additionally, higher cancer grades correlate with poorer survival. In terms of treatment, patients who receive radiation, chemotherapy, or surgery exhibit better survival outcomes across all measurements.
 
 ```{r}
 #| label: tbl-table3
 #| tbl-cap: |
-#|   [Cox Proportional Hazards Regression
-#|   Model for Survival in Adult Women with IBC]{color="#FF2400"}
+#|   [Survival for IBC by Clinicopathological Characteristics]{color="#FF2400"}
+#| out.width: 100%
 knitr::include_graphics(
 	here::here("results", "tables", "t3.png")
+)
+```
+
+We conducted univariate and multivariate analyses based on the data in @tbl-table3, with the results of the Cox proportional hazards regression presented in @tbl-table4.
+
+```{r}
+#| label: tbl-table4
+#| tbl-cap: |
+#|   [Cox Proportional Hazards Regression
+#|   Model for Survival in Adult Women with IBC]{color="#FF2400"}
+#| out.width: 100%
+knitr::include_graphics(
+	here::here("results", "tables", "t4.png")
 )
 ```
 
@@ -149,8 +160,12 @@ In the univariate analysis, subtype, age, race, marital status, N stage, M stage
 
 The multivariate analysis revealed that subtype, age, race, marital status, N stage, M stage, grade, radiation, chemotherapy, and surgery were independent predictors of IBC-specific survival. The Luminal B subtype was associated with better survival (aHR=0.72, 95%CI: 0.56-0.74, P\<0.0001), whereas the Triple-Negative subtype showed the poorest survival outcomes (aHR=2.51, 95%CI: 1.79-2.21, P\<0.0001). In terms of treatment, our results find that the existing therapies are effective in improving survival, that is radiation (aHR=0.76, 95%CI: 0.69-0.85, P\<0.0001), chemotherapy (aHR=0.50, 95%CI: 0.44-0.57, P\<0.0001), and surgery (aHR=0.59, 95%CI: 0.52-0.66, P\<0.0001).
 
+\clearpage
+
 # Discussion
 
-In this large population-based cohort of women diagnosed with IBC, we found a better survival in Luminal B molecular subtype and poorer in Triple Negative. We found that Found that Black patients made up the smallest percentage of Luminal B subtype and the greatest of Triple Negative. Similar findings were observed for patients who were unmarried at diagnosis.
+In this large population-based cohort of women diagnosed with IBC, we found a better survival in Luminal B molecular subtype and poorer in Triple Negative. We found that Black patients made up the smallest percentage of Luminal B subtype and the greatest of Triple Negative. Similar findings were observed for patients who were unmarried at diagnosis.
 
+Take things that ive noted from other study and compare results here.
 It would be interesting to look at the combination of treatments (radiation, chemo, surgery)
+Also comparing subtype to broader range of breat cancer not just IBC.

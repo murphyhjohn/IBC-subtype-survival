@@ -13,7 +13,8 @@ box::use(
   webshot2,
   tidyr,
   ggplot2,
-  Hmisc
+  Hmisc,
+  flextable
 )
 
 # load data
@@ -61,3 +62,7 @@ gt::gtsave(
   vwidth = 2400,
   vheight = 1350
 )
+
+# save to rds
+t1_flex <- flextable::qflextable(t1)
+saveRDS(t1_flex, file = "results/tables/t1.rds")
