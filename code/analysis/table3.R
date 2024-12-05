@@ -1,14 +1,22 @@
+###
 # Table 3: Survival for IBC by Clinicopathological Characteristics
+# MJ 2024-12-04
+# This script creates table 3 of the manuscript, presenting the median, 1-, 5-,
+# and 10- year survival for each covariate.
+###
 
+## Setup ####
 library(survival)
 library(gtsummary)
 library(dplyr)
 
-# load data
+# Load data
 seer <- readRDS("data/processed/seer.rds")
 attach(seer)
 
-# 1, 5, and 10 year survival
+## Create table with 1, 5, and 10 year survival ###
+# Note that we create a filler column of 0-year survival to be replaced with
+# median survival later.
 t3 <- gtsummary::as_tibble(
   seer |>
   gtsummary::tbl_survfit(
@@ -32,9 +40,10 @@ t3 <- gtsummary::as_tibble(
   add_p()
 )
 
+# Assign cleaner column names
 colnames(t3) <- c("Characteristic","Median Survival (years)", "1 Year", "5 Year", "10 Year", "p-value")
 
-# create and assign more descriptive labels
+# Create and assign more descriptive labels
 t3$Characteristic = c(
   "Subtype", "Luminal A", "Luminal B", "Triple Negative", "HER2 Positive",
   "Age", "20-49 years", "50-69 years", ">=70 years",
@@ -47,8 +56,7 @@ t3$Characteristic = c(
   "Chemotherapy", "No/Unknown", "Yes",
   "Surgery", "No/Unknown", "Yes")
 
-# since we can't do both median survival and specific times,
-# create a seperate table with median survival
+## Create a separate table with median survival ####
 t3_med <- gtsummary::as_tibble(
   seer |>
     gtsummary::tbl_survfit(
@@ -72,17 +80,19 @@ t3_med <- gtsummary::as_tibble(
     )
 )
 
+# Assign cleaner column names
 colnames(t3_med) <- c("Characteristic","med_survival")
+# Ensure that median survival is numeric
 t3_med$med_survival <- as.numeric(t3_med$med_survival)
-
-# we want survival to be in years instead on months
+# Tranform the median survival from month to years
 t3_med$med_survival <- round(as.numeric(t3_med$med_survival / 12), 1)
 
-# overwrite the first stats column in table 2 with median survival information
+## Replace the filler column in the first table with median survival ####
 t3$`Median Survival (years)` <- t3_med$med_survival
 
-# Convert the data frame to a flextable
+## Convert the data frame to a flextable ####
 t3_flex <- flextable::flextable(t3)
-t3_flex <- flextable::fontsize(t3_flex, size = 7.5, part = "all")
-# Save the flextable object as RDS
+t3_font <- flextable::fontsize(t3_flex, size = 7.5, part = "all")
+
+## Save the flextable object as RDS ####
 saveRDS(t3_flex, file = here::here("results/tables", "t3.rds"))
