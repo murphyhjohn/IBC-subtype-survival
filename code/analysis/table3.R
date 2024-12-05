@@ -5,7 +5,7 @@
 # and 10- year survival for each covariate.
 ###
 
-## Setup ####
+## Setup =======================================================================
 library(survival)
 library(gtsummary)
 library(dplyr)
@@ -14,7 +14,7 @@ library(dplyr)
 seer <- readRDS("data/processed/seer.rds")
 attach(seer)
 
-## Create table with 1, 5, and 10 year survival ###
+## Create table with 1, 5, and 10 year survival ================================
 # Note that we create a filler column of 0-year survival to be replaced with
 # median survival later.
 t3 <- gtsummary::as_tibble(
@@ -56,7 +56,7 @@ t3$Characteristic = c(
   "Chemotherapy", "No/Unknown", "Yes",
   "Surgery", "No/Unknown", "Yes")
 
-## Create a separate table with median survival ####
+## Create a separate table with median survival ================================
 t3_med <- gtsummary::as_tibble(
   seer |>
     gtsummary::tbl_survfit(
@@ -87,12 +87,14 @@ t3_med$med_survival <- as.numeric(t3_med$med_survival)
 # Tranform the median survival from month to years
 t3_med$med_survival <- round(as.numeric(t3_med$med_survival / 12), 1)
 
-## Replace the filler column in the first table with median survival ####
+## Replace the filler column in the first table with median survival ===========
 t3$`Median Survival (years)` <- t3_med$med_survival
 
-## Convert the data frame to a flextable ####
+## Convert the data frame to a flextable =======================================
 t3_flex <- flextable::flextable(t3)
-t3_font <- flextable::fontsize(t3_flex, size = 7.5, part = "all")
+t3_font <- flextable::fontsize(t3_flex, size = 9, part = "all")
 
-## Save the flextable object as RDS ####
-saveRDS(t3_flex, file = here::here("results/tables", "t3.rds"))
+## Save as RDS =================================================================
+saveRDS(t3_font, file = here::here("results/tables", "t3.rds"))
+
+## End of script ===============================================================

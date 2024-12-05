@@ -1,7 +1,11 @@
+###
 # Table 1: Clinicopathological Characteristics by Breast Cancer Subtype
-# (unadjusted associations between covariates and exposure)
+# MJ 2024-12-05
+# This script creates Table 1 of the manuscript. That is, the unadjusted 
+# associations between covariates and exposure (subtype)
+###
 
-# Declare dependencies
+## Setup =======================================================================
 library(here)
 library(readr)
 library(gt)
@@ -14,7 +18,7 @@ library(stringr)
 seer <- readRDS("data/processed/seer_tab.rds")
 attach(seer)
 
-# create table 1
+## Create table 1 ==============================================================
 t1 <- gtsummary::as_tibble(
   seer |>
   gtsummary::tbl_summary(
@@ -51,8 +55,11 @@ t1 <- gtsummary::as_tibble(
 # Remove Markdown bold (`**`) from the tibble text
 colnames(t1) <- stringr::str_remove_all(colnames(t1), "\\*\\*")
 
-# Convert the data frame to a flextable
+# Convert the tibble to a flextable
 t1_flex <- flextable::flextable(t1)
-t1_flex <- flextable::fontsize(t1_flex, size = 7.5, part = "all")
-# Save the flextable object as RDS
+t1_flex <- flextable::fontsize(t1_flex, size = 8.5, part = "all")
+
+## Save as RDS ================================================================
 saveRDS(t1_flex, file = here::here("results/tables", "t1.rds"))
+
+# End of script ================================================================

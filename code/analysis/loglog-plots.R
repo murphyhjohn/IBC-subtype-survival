@@ -1,5 +1,10 @@
-# Figure 2: Log(-log) plots to check Proportional Hazards assumption
+###
+# Figure 2: Log minus plots to check Proportional Hazards assumption
+# MJ 2024-12-05
+# This script creates Figure 2 log minus log plots
+###
 
+## Setup =======================================================================
 library(gridExtra)
 library(survminer)
 library(survival)
@@ -8,7 +13,7 @@ library(survival)
 seer <- readRDS("data/processed/seer.rds")
 attach(seer)
 
-# create each plot
+## Create each plot ============================================================
 plot_subtype <- ggsurvplot(
   survfit(Surv(time = survival_months, event = survival_status) ~ subtype), 
   data = seer, 
@@ -19,7 +24,7 @@ plot_subtype <- ggsurvplot(
   legend.title = "Subtype:")
 
 plot_agecat <- ggsurvplot(
-  survfit(Surv(time = survival_months, event = survival_status) ~ agecat), 
+  survfit(Surv(time = survival_months, event = survival_status) ~ age), 
   data = seer, 
   fun="cloglog",
   ylab = "log(-log(S(t))",
@@ -28,7 +33,7 @@ plot_agecat <- ggsurvplot(
   legend.title = "Age:")
 
 plot_race <- ggsurvplot(
-  survfit(Surv(time = survival_months, event = survival_status) ~ racecat), 
+  survfit(Surv(time = survival_months, event = survival_status) ~ race), 
   data = seer, 
   fun="cloglog",
   ylab = "log(-log(S(t))",
@@ -99,8 +104,7 @@ plot_surgery <- ggsurvplot(
   legend.labs = c("No/Unknown", "Yes"),
   legend.title = "Surgery:")
 
-# arrange on one grid and save as png
-
+## Arrange on one grid and save as png =========================================
 png("results/figures/loglog_plot.png", width = 900, height = 1100)
 
 grid.arrange(plot_subtype$plot, plot_agecat$plot, plot_race$plot, plot_marriage$plot, plot_n_stage$plot,
@@ -108,3 +112,5 @@ grid.arrange(plot_subtype$plot, plot_agecat$plot, plot_race$plot, plot_marriage$
              ncol = 2, nrow = 5)
 
 dev.off()
+
+## End of script ===============================================================

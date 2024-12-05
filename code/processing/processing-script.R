@@ -1,4 +1,10 @@
+###
+# Processing script
+# MJ 2024-12-05
+# This script cleans and processes the raw data pulled from the SEER database.
+###
 
+## Setup ======================================================================
 library(dplyr)
 library(stringr)
 library(psych)
@@ -6,10 +12,10 @@ library(gmodels)
 library(survival)
 library(survminer)
 
-# load data
+# Load data
 seer1 <- read.csv("data/raw/caselist_2024.11.csv", header = TRUE)
 
-# column rename
+## Rename the columns for easier workflow ======================================
 seer_name <- seer1 %>%
   dplyr::rename(
     age = Age.recode.with..1.year.olds,
@@ -39,12 +45,15 @@ seer_name <- seer1 %>%
     idc_type = Histologic.Type.ICD.O.3
   )
 
+## Filter the data by exclusion criteria =======================================
+# Restrict IDC code to 8500 - 8549
 seer_idc <- seer_name %>%
   filter(
     idc_type %in% seq(8500, 8549) # 481 indiv exclude, 5986 remain
   )
 
-# filter by exclusion criteria
+# Restrict to adult females who survival longer than 1 month and whose cause of
+# death, if dead, is attributable to IBC 
 seer_filter <- seer_idc %>%
   filter(
     age != "00 years",
@@ -57,7 +66,8 @@ seer_filter <- seer_idc %>%
     survival_cause_other != "Dead (attributable to causes other than this cancer dx)", # 487 indiv exclude, 5317 remain
   )
 
-# clean up the variables
+## Clean up existing variable categories and merge variables that were measured
+# differently across years =====================================================
 seer_clean <- seer_filter %>%
   mutate(
     # assign race as White, Black, or Other
@@ -71,7 +81,6 @@ seer_clean <- seer_filter %>%
       marriage_status == "Married (including common law)" ~ "Yes",
       TRUE ~ "No"
     ),
-    
     # assign blank tnm to NA
     tnm2015 = case_when(
       tnm2015 == "Blank(s)" ~ NA_character_,
@@ -85,7 +94,6 @@ seer_clean <- seer_filter %>%
       tnm2018 == "Blank(s)" ~ NA_character_,
       TRUE ~ tnm2018
     ),
-    
     # merge tnm to ensure cross-validation
     tnm = coalesce(tnm2015, tnm2017, tnm2018),
     
@@ -120,7 +128,7 @@ seer_clean <- seer_filter %>%
       grade2018 == "Blank(s)" ~ NA_character_,
       TRUE ~ grade2018
     ),
-    # then merge the 2017 and 2018 grade columns
+    # merge the 2017 and 2018 grade columns
     grade = coalesce(grade2017, grade2018),
     
     # assign N stage type for easier analysis
@@ -148,7 +156,7 @@ seer_clean <- seer_filter %>%
       str_detect(n2018, "NX") ~ NA_character_,
       TRUE ~ NA_character_
     ),
-    # then merge the 2015, 2017, and 2018 N stage columns
+    # merge the 2015, 2017, and 2018 N stage columns
     n_stage = coalesce(n2015, n2017, n2018),
     
     # assign M stage type for easier analysis
@@ -168,10 +176,10 @@ seer_clean <- seer_filter %>%
       TRUE ~ NA_character_
     ),
     
-    # then merge the 2015, 2017, and 2018 M stage columns
+    # merge the 2015, 2017, and 2018 M stage columns
     m_stage = coalesce(m2015, m2017, m2018),
     
-    # simplify the radiation variable
+    # simplify the radiation and surgery variables
     radiation = case_when(
       str_detect(radiation, "None|Refused|unknown") ~ "No/Unknown",
       TRUE ~ "Yes"
@@ -182,7 +190,8 @@ seer_clean <- seer_filter %>%
       TRUE ~ "Yes"
     )
   )
-# exclude incomplete observations
+
+## Restrict to complete observations only ======================================
 seer_complete <- seer_clean %>%
   filter(
     !is.na(subtype), # 313 indiv excluded, 5004 remain
@@ -190,8 +199,9 @@ seer_complete <- seer_clean %>%
     n_stage != "NX" # 106 indiv excluded, 4140 remain
   )
 
-# there are several variables that need to be categorized for analysis and/filtered
-# for this df leave the category names legible for creating table 1
+## Create the categories to be used in our analysis ============================
+
+# Leave category names more descriptive for creating Table 1
 seer_catclean <- seer_complete %>%
   mutate(subtype = factor(
     subtype, levels = c("Luminal A", "Luminal B", "HER2 Positive", "Triple Negative")
@@ -221,7 +231,7 @@ seer_catclean <- seer_complete %>%
     TRUE ~ NA_character_
   ))
 
-# save this data with named categories as it will be useful for creating table 1
+# Save data with named categories for creating table 1
 seer_tab <- seer_catclean %>%
   select(
     agecat,
@@ -238,10 +248,10 @@ seer_tab <- seer_catclean %>%
     survival_status,
   )
 
-# save as rds file
+# Save as rds file
 saveRDS(seer_tab, file = "data/processed/seer_tab.rds")
 
-# there are several variables that need to be categorized for analysis and/filtered
+# Code the different categories numerically to be used in our analyses
 seer_cat <- seer_complete %>%
   mutate(agecat = factor(
     case_when(
@@ -308,14 +318,14 @@ seer_cat <- seer_complete %>%
       surgery == "Yes" ~ 1,
       TRUE ~ NA_integer_
     ))) %>%
-  # the survival_status column is what we use for event/censoring
-  # recode Dead as 1 and Alive (censored) as 0
+  # The survival_status column is what we use for event/censoring
+  # Recode Dead as 1 and Alive (censored) as 0
   mutate(status_cat = case_when(
       survival_status == "Dead" ~ 1,
       survival_status == "Alive" ~ 0
     ))
 
-# further filter and select only variables used in analysis
+## Select only variables used in our analysis ==================================
 seer <- seer_cat %>%
   select(
     age = agecat,
@@ -332,5 +342,7 @@ seer <- seer_cat %>%
     survival_status = status_cat,
   )
 
-# save as rds file
+## Save as rds file ============================================================
 saveRDS(seer, file = "data/processed/seer.rds")
+
+## End of script ===============================================================

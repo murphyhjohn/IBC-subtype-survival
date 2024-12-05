@@ -5,7 +5,7 @@
 # adjusted cox proportional hazards models.
 ###
 
-## Setup ####
+## Setup =======================================================================
 library(survival)
 library(dplyr)
 
@@ -14,13 +14,14 @@ seer <- readRDS("data/processed/seer.rds")
 attach(seer)
 
 
-## Create the univariate coxph model and table ####
+## Create the univariate coxph model and table =================================
 t4_uv <- gtsummary::tbl_uvregression(
   data = seer,
   method = coxph,
   y = Surv(survival_months, survival_status),
   exponentiate = TRUE,
-  include = c(subtype, age, race, marriage_status, n_stage, m_stage, grade, radiation, chemotherapy, surgery),
+  include = c(subtype, age, race, marriage_status, n_stage, m_stage, grade, 
+              radiation, chemotherapy, surgery),
   label = list(
     subtype ~ "Subtype", 
     age ~ "Age",
@@ -49,7 +50,7 @@ t4_uv$table_body$label[1:36] = c(
   "Chemotherapy", "No/Unknown", "Yes",
   "Surgery", "No/Unknown", "Yes")
 
-## Create the multivariate coxph model and table ####
+## Create the multivariate coxph model and table ===============================
 t4_mv <- coxph(
     Surv(survival_months, survival_status) ~ 
       subtype + 
@@ -93,7 +94,7 @@ t4_mv$table_body$label = c(
   "Chemotherapy", "No/Unknown", "Yes",
   "Surgery", "No/Unknown", "Yes")
 
-## Stick the univariate and multivariate tables together to make table 4 ####
+## Stick the univariate and multivariate tables together to make table 4 =======
 t4_merge <- gtsummary::as_tibble(
   gtsummary::tbl_merge(
     list(t4_uv, t4_mv),
@@ -120,7 +121,9 @@ og_names <- c("Characteristic", "HR", "95% CI", "p-value",
               "aHR", "95% CI", "p-value")
 t4_og <- flextable::set_header_labels(t4_flex, 
                                    values = setNames(og_names, temp_colnames))
-t4 <- flextable::fontsize(t4_og, size = 7.5, part = "all")
+t4 <- flextable::fontsize(t4_og, size = 9, part = "all")
 
-## Save as rds ####
+## Save as rds =================================================================
 saveRDS(t4, file = here::here("results/tables", "t4.rds"))
+
+## End of script ===============================================================
