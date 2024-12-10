@@ -1,9 +1,3 @@
----
-editor_options: 
-  markdown: 
-    wrap: 72
----
-
 # Data
 
 This folder contains the raw and processed data used for analysis.

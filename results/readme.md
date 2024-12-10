@@ -1,9 +1,3 @@
----
-editor_options: 
-  markdown: 
-    wrap: 72
----
-
 # Results
 
 This folder contains the figures and tables in .png and .rds form that

@@ -8,7 +8,7 @@ This project is for Cohort Studies (EPID 8010) at the University of Georgia in F
 
 ## Research Question
 
-The research question that this project aims to answer is, "How is breast cancer subtype associated with overall survival of adult women with inflammatory breast cancer?"
+The research question that this project aims to answer is, "How is molecular subtype associated with overall survival in adult women with inflammatory breast cancer?"
 
 ## Description of Contents
 
