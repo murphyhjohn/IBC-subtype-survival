@@ -1,6 +1,6 @@
 # Manuscript
 
-This foldr contains all files needed to produce my manuscript, located within the `manuscript` subfolder.
+This folder contains all files needed to reproduce my manuscript, located within the `manuscript` subfolder.
 
 `manuscript.qmd` contains the code used to produce `manuscript.pdf`, my final 
 manuscript.
