@@ -1,6 +1,6 @@
 # Effect of Molecular Subtype on Mortality in U.S. Adult Women with Inflammatory Breast Cancer
 
-Murphy John
+View final manuscript [here](https://github.com/murphyhjohn/IBC-subtype-survival/blob/main/products/manuscript/manuscript.pdf).
 
 ## Introduction
 
